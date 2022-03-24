@@ -50,9 +50,8 @@ class Board {
     Board(Board board0) {
         _board = board0._board.clone();
         _whoseMove = board0.whoseMove();
-        _allMoves = board0._allMoves;
+        _allMoves = new ArrayList<>();
         _numPieces = board0._numPieces.clone();
-        _numMoves = board0.numMoves();
         _numJumps = board0.numJumps();
         _totalOpen = board0.totalOpen();
         _undoPieces = new Stack<>();
@@ -72,7 +71,6 @@ class Board {
      *  positions and no blocks. */
     void clear() {
         _whoseMove = RED;
-        _numMoves = 0;
         _allMoves = new ArrayList<>();
         _totalOpen = SIDE * SIDE;
         _numJumps = 0;
@@ -196,7 +194,6 @@ class Board {
             _numJumps = 0;
             incrPieces(whoseMove(), 1);
         }
-        _numMoves++;
         _whoseMove = opponent;
         announce();
     }
@@ -231,8 +228,6 @@ class Board {
      *  is legal to do so. Passing is undoable. */
     void pass() {
         assert !canMove(_whoseMove);
-        _numMoves++;
-        allMoves().add(Move.pass());
         startUndo();
         _whoseMove = _whoseMove.opposite();
         announce();
@@ -250,7 +245,6 @@ class Board {
         _undoSquares.pop();
         _undoPieces.pop();
         _whoseMove = whoseMove().opposite();
-        _numMoves--;
         if (_allMoves.get(_allMoves.size() - 1).isJump()) {
             _numJumps = listJump().pop();
         }
@@ -363,12 +357,12 @@ class Board {
             out.format(" ");
             for (char c = 'a'; c <= 'g'; c += 1) {
                 switch (get(c, r)) {
-                    case RED -> out.format(" r");
-                    case BLUE -> out.format(" b");
-                    case BLOCKED -> out.format(" X");
-                    case EMPTY -> out.format(" -");
-                    default -> {
-                    }
+                case RED -> out.format(" r");
+                case BLUE -> out.format(" b");
+                case BLOCKED -> out.format(" X");
+                case EMPTY -> out.format(" -");
+                default -> {
+                }
                 }
             }
             out.format("%n");
@@ -412,7 +406,8 @@ class Board {
             _winner = BLUE;
         } else if (bluePieces() == 0) {
             _winner = RED;
-        } else if ((!canMove(opponent) && !canMove(self)) || numJumps() == JUMP_LIMIT) {
+        } else if ((!canMove(opponent) && !canMove(self))
+                || numJumps() == JUMP_LIMIT) {
             if (bluePieces() > redPieces()) {
                 _winner = BLUE;
             } else if (bluePieces() < redPieces()) {
@@ -469,7 +464,7 @@ class Board {
     /** Return total number of moves and passes since the last
      *  clear or the creation of the board. */
     int numMoves() {
-        return _numMoves;
+        return _allMoves.size();
     }
 
     /** Return number of non-pass moves made in the current game since the
@@ -566,7 +561,4 @@ class Board {
 
     /** Number of consecutive non-extending moves before game ends. */
     static final int JUMP_LIMIT = 25;
-
-    /** Total number of Moves done on the board right now. */
-    private int _numMoves = 0;
 }

@@ -4,6 +4,7 @@
 
 package ataxx;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static ataxx.PieceColor.*;
@@ -81,14 +82,43 @@ class AI extends Player {
         if (depth == 0 || board.getWinner() != null) {
             return staticScore(board, WINNING_VALUE + depth);
         }
-
         Move best;
         best = null;
         int bestScore;
-        bestScore = 0; // FIXME
-
-        // FIXME
-
+        ArrayList<Move> possibleMoves = possibleMoves(board, board.whoseMove());
+        if (sense == 1) {
+            bestScore = -INFTY;
+            for (Move move : possibleMoves) {
+                Board copy = new Board(board);
+                copy.makeMove(move);
+                int possibleValue
+                        = minMax(copy, depth - 1, false, -1, alpha, beta);
+                if (saveMove && possibleValue > bestScore) {
+                    best = move;
+                }
+                bestScore = max(bestScore, possibleValue);
+                alpha = max(alpha, bestScore);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+        } else {
+            bestScore = INFTY;
+            for (Move move : possibleMoves) {
+                Board copy = new Board(board);
+                copy.makeMove(move);
+                int possibleValue
+                        = minMax(copy, depth - 1, false, 1, alpha, beta);
+                if (saveMove && possibleValue < bestScore) {
+                    best = move;
+                }
+                bestScore = min(bestScore, possibleValue);
+                beta = min(beta, bestScore);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+        }
         if (saveMove) {
             _lastFoundMove = best;
         }
@@ -106,8 +136,35 @@ class AI extends Player {
             default -> 0;
             };
         }
+        int myColor = board.numPieces(board.whoseMove());
+        int oppColor = board.numPieces(board.whoseMove().opposite());
+        return myColor - oppColor;
+    }
 
-        return 0; // FIXME
+    /** Return all possible moves for a color.
+     * @param board the current board.
+     * @param myColor the specified color.
+     * @return an ArrayList of all possible moves for the specified color. */
+    private ArrayList<Move> possibleMoves(Board board, PieceColor myColor) {
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+        for (char row = '1'; row <= '7'; row++) {
+            for (char col = 'a'; col <= 'g'; col++) {
+                int index = Board.index(col, row);
+                if (board.get(index) == myColor) {
+                    for (int i = -2; i <= 2; i++) {
+                        for (int j = -2; j <= 2; j++) {
+                            char row2 = (char) (row + j);
+                            char col2 = (char) (col + i);
+                            Move currMove = Move.move(col, row, col2, row2);
+                            if (board.legalMove(currMove)) {
+                                possibleMoves.add(currMove);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return possibleMoves;
     }
 
     /** Pseudo-random number generator for move computation. */
