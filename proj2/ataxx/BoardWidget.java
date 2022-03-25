@@ -6,16 +6,15 @@ package ataxx;
 
 import ucb.gui2.Pad;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.BasicStroke;
-
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
 import static ataxx.PieceColor.*;
-import static ataxx.Utils.*;
 
 /** Widget for displaying an Ataxx board.
  *  @author Darren Wang
@@ -76,13 +75,47 @@ class BoardWidget extends Pad  {
     public synchronized void paintComponent(Graphics2D g) {
         g.setColor(BLANK_COLOR);
         g.fillRect(0, 0, _dim, _dim);
-
-        // FIXME
+        for (char r = '7'; r >= '1'; r--) {
+            for (char c = 'a'; c <= 'g'; c++) {
+                int locRow = ('7' - r) * SQDIM;
+                int locCol = (c - 'a') * SQDIM;
+                g.setStroke(LINE_STROKE);
+                g.setPaint(LINE_COLOR);
+                Rectangle square
+                        = new Rectangle(locCol, locRow, SQDIM, SQDIM);
+                g.draw(square);
+                if (_selectedCol == c && _selectedRow == r) {
+                    g.setColor(SELECTED_COLOR);
+                    g.fillRect(locCol + 1, locRow + 1,
+                            SQDIM - 1, SQDIM - 1);
+                }
+                if (_model.get(c, r) == BLUE) {
+                    g.setColor(BLUE_COLOR);
+                    g.fillOval(locCol + 10, locRow + 10,
+                            2 * PIECE_RADIUS, 2 * PIECE_RADIUS);
+                } else if (_model.get(c, r) == RED) {
+                    g.setColor(RED_COLOR);
+                    g.fillOval(locCol + 10, locRow + 10,
+                            2 * PIECE_RADIUS, 2 * PIECE_RADIUS);
+                } else if (_model.get(c, r) == BLOCKED) {
+                    drawBlock(g, locCol + 25, locRow + 25);
+                }
+            }
+        }
     }
 
     /** Draw a block centered at (CX, CY) on G. */
     void drawBlock(Graphics2D g, int cx, int cy) {
-        // FIXME
+        int leftX = cx - 20;
+        int upY = cy - 20;
+        int rightX = cx + 20;
+        int downY = cy + 20;
+        g.setStroke(BLOCK_STROKE);
+        g.setPaint(BLOCK_COLOR);
+        Rectangle square = new Rectangle(leftX, upY, BLOCK_WIDTH, BLOCK_WIDTH);
+        g.draw(square);
+        g.drawLine(leftX, upY, rightX, downY);
+        g.drawLine(leftX, downY, rightX, upY);
     }
 
     /** Clear selected block, if any, and turn off block mode. */
@@ -106,11 +139,15 @@ class BoardWidget extends Pad  {
             if (mouseCol >= 'a' && mouseCol <= 'g'
                 && mouseRow >= '1' && mouseRow <= '7') {
                 if (_blockMode) {
-                    _commandQueue.offer("block c3"); // FIXME
+                    _commandQueue.offer("block " + mouseCol + mouseRow);
                 } else {
                     if (_selectedCol != 0) {
-                        // FIXME
-                        _selectedCol = _selectedRow = 0;
+                        _commandQueue.offer(String.valueOf(_selectedCol)
+                                + _selectedRow
+                                + '-'
+                                + mouseCol
+                                + mouseRow);
+                        reset();
                     } else {
                         _selectedCol = mouseCol;
                         _selectedRow = mouseRow;

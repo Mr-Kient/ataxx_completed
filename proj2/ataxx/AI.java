@@ -147,7 +147,7 @@ class AI extends Player {
      * @return an ArrayList of all possible moves for the specified color. */
     private ArrayList<Move> possibleMoves(Board board, PieceColor myColor) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
-        for (char row = '1'; row <= '7'; row++) {
+        for (char row = '7'; row >= '1'; row--) {
             for (char col = 'a'; col <= 'g'; col++) {
                 int index = Board.index(col, row);
                 if (board.get(index) == myColor) {
