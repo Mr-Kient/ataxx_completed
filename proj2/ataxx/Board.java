@@ -200,6 +200,7 @@ class Board {
             incrPieces(whoseMove(), 1);
         }
         _whoseMove = opponent;
+        getWinner();
         announce();
     }
 
