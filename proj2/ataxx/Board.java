@@ -194,20 +194,6 @@ class Board {
             _numJumps = 0;
             incrPieces(whoseMove(), 1);
         }
-        if (redPieces() == 0) {
-            _winner = BLUE;
-        } else if (bluePieces() == 0) {
-            _winner = RED;
-        } else if ((!canMove(opponent) && !canMove(_whoseMove))
-                || numJumps() == JUMP_LIMIT) {
-            if (bluePieces() > redPieces()) {
-                _winner = BLUE;
-            } else if (bluePieces() < redPieces()) {
-                _winner = RED;
-            } else {
-                _winner = EMPTY;
-            }
-        }
         _whoseMove = opponent;
         announce();
     }
@@ -414,6 +400,22 @@ class Board {
      *  having been JUMP_LIMIT consecutive jumps without intervening extends,
      *  or if neither player can move and both have the same number of pieces.*/
     PieceColor getWinner() {
+        if (redPieces() == 0) {
+            _winner = BLUE;
+        } else if (bluePieces() == 0) {
+            _winner = RED;
+        } else if ((!canMove(whoseMove()) && !canMove(whoseMove().opposite()))
+                || numJumps() == JUMP_LIMIT) {
+            if (bluePieces() > redPieces()) {
+                _winner = BLUE;
+            } else if (bluePieces() < redPieces()) {
+                _winner = RED;
+            } else {
+                _winner = EMPTY;
+            }
+        } else {
+            _winner = null;
+        }
         return _winner;
     }
 
