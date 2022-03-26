@@ -83,6 +83,11 @@ class Board {
             } else if (i == EXTENDED_SIDE * 8 + 8
                     || i == EXTENDED_SIDE * 2 + 2) {
                 unrecordedSet(i, BLUE);
+            } else if (i % EXTENDED_SIDE == 0
+                    || i % EXTENDED_SIDE == EXTENDED_SIDE - 1
+                    || i < EXTENDED_SIDE
+                    || i > EXTENDED_SIDE * (EXTENDED_SIDE - 1)) {
+                unrecordedSet(i, BLOCKED);
             } else {
                 unrecordedSet(i, EMPTY);
             }
