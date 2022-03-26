@@ -6,7 +6,6 @@ package ataxx;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import static ataxx.PieceColor.*;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
@@ -29,7 +28,6 @@ class AI extends Player {
      *  seeds produce identical behaviour. */
     AI(Game game, PieceColor myColor, long seed) {
         super(game, myColor);
-        _random = new Random(seed);
     }
 
     @Override
@@ -82,47 +80,45 @@ class AI extends Player {
         if (depth == 0 || board.getWinner() != null) {
             return staticScore(board, WINNING_VALUE + depth);
         }
-        Move best;
-        int bestScore;
-        best = null;
-        ArrayList<Move> possibleMoves = possibleMoves(board, board.whoseMove());
+        int bestValue;
         if (sense == 1) {
-            bestScore = -INFTY;
-            for (Move move : possibleMoves) {
-                Board copy = new Board(board);
-                copy.makeMove(move);
-                int possibleValue
-                        = minMax(copy, depth - 1, false, -1, alpha, beta);
-                if (saveMove && possibleValue > bestScore) {
-                    best = move;
+            bestValue = -INFTY;
+            ArrayList<Move> listOfMoves =
+                    possibleMoves(board, board.whoseMove());
+            for (Move move : listOfMoves) {
+                Board copyBoard = new Board(board);
+                copyBoard.makeMove(move);
+                int possible = minMax(copyBoard, depth - 1, false, -1, alpha, beta);
+                if (saveMove && possible > bestValue) {
+                    _lastFoundMove = move;
                 }
-                bestScore = max(bestScore, possibleValue);
-                alpha = max(alpha, bestScore);
+                bestValue = max(bestValue, possible);
+                alpha = max(alpha, bestValue);
                 if (beta <= alpha) {
                     break;
                 }
+                return bestValue;
             }
         } else {
-            bestScore = INFTY;
-            for (Move move : possibleMoves) {
-                Board copy = new Board(board);
-                copy.makeMove(move);
-                int possibleValue
-                        = minMax(copy, depth - 1, false, 1, alpha, beta);
-                if (saveMove && possibleValue < bestScore) {
-                    best = move;
+            bestValue = INFTY;
+            ArrayList<Move> listOfMoves =
+                    possibleMoves(board, board.whoseMove());
+            for (Move move : listOfMoves) {
+                Board copyBoard = new Board(board);
+                copyBoard.makeMove(move);
+                int possible = minMax(copyBoard, depth - 1, false, 1, alpha, beta);
+                if (saveMove && possible < bestValue) {
+                    _lastFoundMove = move;
                 }
-                bestScore = min(bestScore, possibleValue);
-                beta = min(beta, bestScore);
+                bestValue = min(bestValue, possible);
+                beta = min(beta, bestValue);
                 if (beta <= alpha) {
                     break;
                 }
+                return bestValue;
             }
         }
-        if (saveMove) {
-            _lastFoundMove = best;
-        }
-        return bestScore;
+        return 0;
     }
 
     /** Return a heuristic value for BOARD.  This value is +- WINNINGVALUE in
@@ -151,22 +147,29 @@ class AI extends Player {
             for (char col = 'a'; col <= 'g'; col++) {
                 int index = Board.index(col, row);
                 if (board.get(index) == myColor) {
-                    for (int i = -2; i <= 2; i++) {
-                        for (int j = -2; j <= 2; j++) {
-                            char row2 = (char) (row + j);
-                            char col2 = (char) (col + i);
-                            Move currMove = Move.move(col, row, col2, row2);
-                            if (board.legalMove(currMove)) {
-                                possibleMoves.add(currMove);
-                            }
-                        }
-                    }
+                    ArrayList<Move> addMoves = assistPossibleMoves(board, row, col);
+                    possibleMoves.addAll(addMoves);
                 }
             }
         }
         return possibleMoves;
     }
 
-    /** Pseudo-random number generator for move computation. */
-    private Random _random = new Random();
+    /** Returns an Arraylist of legal moves. */
+    private ArrayList<Move> assistPossibleMoves(Board board, char row, char col) {
+        ArrayList<Move> assistPossibleMoves = new ArrayList<>();
+        for (int i = -2; i <= 2; i++) {
+            for (int j = -2; j <= 2; j++) {
+                if (i != 0 && j != 0) {
+                    char row2 = (char) (row + j);
+                    char col2 = (char) (col + i);
+                    Move currMove = Move.move(col, row, col2, row2);
+                    if (board.legalMove(currMove)) {
+                        assistPossibleMoves.add(currMove);
+                    }
+                }
+            }
+        }
+        return assistPossibleMoves;
+    }
 }

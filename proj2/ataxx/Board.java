@@ -133,9 +133,8 @@ class Board {
         return legalMove(Move.move(c0, r0, c1, r1));
     }
 
-    /** Return true iff MOVE is legal on the current board.
-     * @param who the color for testing. */
-    private boolean legalMoveNoColor(char c0, char r0, char c1, char r1, PieceColor who) {
+    /** Return true iff MOVE is legal on the current board without testing color. */
+    private boolean legalMoveNoColor(char c0, char r0, char c1, char r1) {
         Move move = Move.move(c0, r0, c1, r1);
         if (move == null) {
             return false;
@@ -150,13 +149,8 @@ class Board {
                     || r1 > '7') {
                 return false;
             }
-            PieceColor curColor = get(move.fromIndex());
             PieceColor destColor = get(move.toIndex());
-            if (move.isPass()) {
-                return !canMove(who);
-            } else if (curColor != who) {
-                return false;
-            } else if (destColor != EMPTY) {
+            if (destColor != EMPTY) {
                 return false;
             } else {
                 return move.isExtend() || move.isJump();
@@ -172,10 +166,12 @@ class Board {
                 if (get(c, r) == who) {
                     for (int i = -2; i <= 2; i++) {
                         for (int j = -2; j <= 2; j++) {
-                            char c2 = (char) (c + i);
-                            char r2 = (char) (r + j);
-                            if (legalMoveNoColor(c, r, c2, r2, who)) {
-                                return true;
+                            if (i != 0 && j != 0) {
+                                char c2 = (char) (c + i);
+                                char r2 = (char) (r + j);
+                                if (legalMoveNoColor(c, r, c2, r2)) {
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -208,10 +204,7 @@ class Board {
 
     /** Make the MOVE on this Board, assuming it is legal. */
     void makeMove(Move move) {
-        if (getWinner() != null) {
-            return;
-        }
-        if (!legalMove(move)) {
+        if (!legalMove(move) || getWinner() != null) {
             throw error("Illegal move: %s", move);
         }
         if (move.isPass()) {
