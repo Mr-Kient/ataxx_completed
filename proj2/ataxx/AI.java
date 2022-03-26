@@ -83,8 +83,8 @@ class AI extends Player {
             return staticScore(board, WINNING_VALUE + depth);
         }
         Move best;
-        best = null;
         int bestScore;
+        best = null;
         ArrayList<Move> possibleMoves = possibleMoves(board, board.whoseMove());
         if (sense == 1) {
             bestScore = -INFTY;
