@@ -414,7 +414,7 @@ class Board {
             _winner = BLUE;
         } else if (bluePieces() == 0) {
             _winner = RED;
-        } else if ((!canMove(whoseMove()) && !canMove(whoseMove().opposite()))
+        } else if (redPieces() + bluePieces() == totalOpen()
                 || numJumps() == JUMP_LIMIT) {
             if (bluePieces() > redPieces()) {
                 _winner = BLUE;
