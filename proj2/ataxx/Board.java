@@ -133,6 +133,37 @@ class Board {
         return legalMove(Move.move(c0, r0, c1, r1));
     }
 
+    /** Return true iff MOVE is legal on the current board.
+     * @param who the color for testing. */
+    private boolean legalMoveNoColor(char c0, char r0, char c1, char r1, PieceColor who) {
+        Move move = Move.move(c0, r0, c1, r1);
+        if (move == null) {
+            return false;
+        } else {
+            if (c0 < 'a'
+                    || c0 > 'g'
+                    || c1 < 'a'
+                    || c1 > 'g'
+                    || r0 < '1'
+                    || r0 > '7'
+                    || r1 < '1'
+                    || r1 > '7') {
+                return false;
+            }
+            PieceColor curColor = get(move.fromIndex());
+            PieceColor destColor = get(move.toIndex());
+            if (move.isPass()) {
+                return !canMove(who);
+            } else if (curColor != who) {
+                return false;
+            } else if (destColor != EMPTY) {
+                return false;
+            } else {
+                return move.isExtend() || move.isJump();
+            }
+        }
+    }
+
     /** Return true iff player WHO can move, ignoring whether it is
      *  that player's move and whether the game is over. */
     boolean canMove(PieceColor who) {
@@ -143,7 +174,7 @@ class Board {
                         for (int j = -2; j <= 2; j++) {
                             char c2 = (char) (c + i);
                             char r2 = (char) (r + j);
-                            if (legalMove(c, r, c2, r2)) {
+                            if (legalMoveNoColor(c, r, c2, r2, who)) {
                                 return true;
                             }
                         }
