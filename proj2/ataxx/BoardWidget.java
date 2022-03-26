@@ -147,7 +147,7 @@ class BoardWidget extends Pad  {
                                 + '-'
                                 + mouseCol
                                 + mouseRow);
-                        reset();
+                        _selectedRow = _selectedCol = 0;
                     } else {
                         _selectedCol = mouseCol;
                         _selectedRow = mouseRow;
