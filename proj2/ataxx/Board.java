@@ -136,10 +136,7 @@ class Board {
     /** Return true iff player WHO can move, ignoring whether it is
      *  that player's move and whether the game is over. */
     boolean canMove(PieceColor who) {
-        if (getWinner() != null) {
-            return false;
-        }
-        for (char r = '1'; r <= '7'; r++) {
+        for (char r = '7'; r >= '1'; r--) {
             for (char c = 'a'; c <= 'g'; c++) {
                 if (get(c, r) == who) {
                     for (int i = -2; i <= 2; i++) {
@@ -185,6 +182,9 @@ class Board {
         }
         if (move.isPass()) {
             pass();
+            return;
+        }
+        if (getWinner() != null) {
             return;
         }
         _allMoves.add(move);
