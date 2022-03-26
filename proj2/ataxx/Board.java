@@ -136,7 +136,7 @@ class Board {
     /** Return true iff player WHO can move, ignoring whether it is
      *  that player's move and whether the game is over. */
     boolean canMove(PieceColor who) {
-        if (_winner != null) {
+        if (getWinner() != null) {
             return false;
         }
         for (char r = '1'; r <= '7'; r++) {
