@@ -1,0 +1,7 @@
+#* staff-ataxx --strict
+# Play the game just with staff-ataxx to test if it is able to run it here.
+seed 1000000
+block b2
+auto red
+#*remote move/win
+quit
