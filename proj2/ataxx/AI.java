@@ -5,7 +5,6 @@
 package ataxx;
 
 import java.util.ArrayList;
-import java.util.Random;
 import static ataxx.PieceColor.*;
 import static java.lang.Math.min;
 import static java.lang.Math.max;
@@ -37,10 +36,6 @@ class AI extends Player {
 
     @Override
     String getMove() {
-        if (!getBoard().canMove(myColor())) {
-            game().reportMove(Move.pass(), myColor());
-            return "-";
-        }
         Main.startTiming();
         Move move = findMove();
         Main.endTiming();
@@ -57,6 +52,9 @@ class AI extends Player {
             minMax(b, MAX_DEPTH, true, 1, -INFTY, INFTY);
         } else {
             minMax(b, MAX_DEPTH, true, -1, -INFTY, INFTY);
+        }
+        if (_lastFoundMove == null) {
+            _lastFoundMove = Move.pass();
         }
         return _lastFoundMove;
     }
@@ -88,7 +86,8 @@ class AI extends Player {
             for (Move move : listOfMoves) {
                 Board copyBoard = new Board(board);
                 copyBoard.makeMove(move);
-                int possible = minMax(copyBoard, depth - 1, false, -1, alpha, beta);
+                int possible
+                        = minMax(copyBoard, depth - 1, false, -1, alpha, beta);
                 if (saveMove && possible > bestValue) {
                     _lastFoundMove = move;
                 }
@@ -106,7 +105,8 @@ class AI extends Player {
             for (Move move : listOfMoves) {
                 Board copyBoard = new Board(board);
                 copyBoard.makeMove(move);
-                int possible = minMax(copyBoard, depth - 1, false, 1, alpha, beta);
+                int possible
+                        = minMax(copyBoard, depth - 1, false, 1, alpha, beta);
                 if (saveMove && possible < bestValue) {
                     _lastFoundMove = move;
                 }
@@ -147,7 +147,8 @@ class AI extends Player {
             for (char col = 'a'; col <= 'g'; col++) {
                 int index = Board.index(col, row);
                 if (board.get(index) == myColor) {
-                    ArrayList<Move> addMoves = assistPossibleMoves(board, row, col);
+                    ArrayList<Move> addMoves
+                            = assistPossibleMoves(board, row, col);
                     possibleMoves.addAll(addMoves);
                 }
             }
@@ -155,12 +156,16 @@ class AI extends Player {
         return possibleMoves;
     }
 
-    /** Returns an Arraylist of legal moves. */
-    private ArrayList<Move> assistPossibleMoves(Board board, char row, char col) {
+    /** Returns an Arraylist of legal moves.
+     * @param board the board for testing
+     * @param row the row coordinate of the center
+     * @param col the col coordinate of the center */
+    private ArrayList<Move>
+        assistPossibleMoves(Board board, char row, char col) {
         ArrayList<Move> assistPossibleMoves = new ArrayList<>();
         for (int i = -2; i <= 2; i++) {
             for (int j = -2; j <= 2; j++) {
-                if (i != 0 && j != 0) {
+                if (i != 0 || j != 0) {
                     char row2 = (char) (row + j);
                     char col2 = (char) (col + i);
                     Move currMove = Move.move(col, row, col2, row2);

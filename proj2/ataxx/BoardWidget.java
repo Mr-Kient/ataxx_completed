@@ -29,6 +29,10 @@ class BoardWidget extends Pad  {
     static final int PIECE_RADIUS = 15;
     /** Dimension of a block. */
     static final int BLOCK_WIDTH = 40;
+    /** Magic number 20. */
+    private static final int MAGICNUM20 = 20;
+    /** Magic number 25. */
+    private static final int MAGICNUM25 = 25;
 
     /** Color of red pieces. */
     private static final Color RED_COLOR = Color.RED;
@@ -98,7 +102,7 @@ class BoardWidget extends Pad  {
                     g.fillOval(locCol + 10, locRow + 10,
                             2 * PIECE_RADIUS, 2 * PIECE_RADIUS);
                 } else if (_model.get(c, r) == BLOCKED) {
-                    drawBlock(g, locCol + 25, locRow + 25);
+                    drawBlock(g, locCol + MAGICNUM25, locRow + MAGICNUM25);
                 }
             }
         }
@@ -106,10 +110,10 @@ class BoardWidget extends Pad  {
 
     /** Draw a block centered at (CX, CY) on G. */
     void drawBlock(Graphics2D g, int cx, int cy) {
-        int leftX = cx - 20;
-        int upY = cy - 20;
-        int rightX = cx + 20;
-        int downY = cy + 20;
+        int leftX = cx - MAGICNUM20;
+        int upY = cy - MAGICNUM20;
+        int rightX = cx + MAGICNUM20;
+        int downY = cy + MAGICNUM20;
         g.setStroke(BLOCK_STROKE);
         g.setPaint(BLOCK_COLOR);
         Rectangle square = new Rectangle(leftX, upY, BLOCK_WIDTH, BLOCK_WIDTH);

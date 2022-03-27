@@ -104,58 +104,26 @@ class Board {
         if (move == null) {
             return false;
         } else {
-            if (move.col0() < 'a'
-                    || move.col0() > 'g'
-                    || move.col1() < 'a'
+            if (move.isPass()) {
+                return canMove(whoseMove());
+            } else if (move.col1() < 'a'
                     || move.col1() > 'g'
-                    || move.row0() < '1'
-                    || move.row0() > '7'
                     || move.row1() < '1'
                     || move.row1() > '7') {
                 return false;
             }
             PieceColor curColor = get(move.fromIndex());
             PieceColor destColor = get(move.toIndex());
-            if (move.isPass()) {
-                return !canMove(_whoseMove);
-            } else if (curColor != _whoseMove) {
+            if (curColor != whoseMove()) {
                 return false;
-            } else if (destColor != EMPTY) {
-                return false;
-            } else {
-                return move.isExtend() || move.isJump();
             }
+            return destColor == EMPTY;
         }
     }
 
     /** Return true iff C0 R0 - C1 R1 is legal on the current board. */
     boolean legalMove(char c0, char r0, char c1, char r1) {
         return legalMove(Move.move(c0, r0, c1, r1));
-    }
-
-    /** Return true iff MOVE is legal on the current board without testing color. */
-    private boolean legalMoveNoColor(char c0, char r0, char c1, char r1) {
-        Move move = Move.move(c0, r0, c1, r1);
-        if (move == null) {
-            return false;
-        } else {
-            if (c0 < 'a'
-                    || c0 > 'g'
-                    || c1 < 'a'
-                    || c1 > 'g'
-                    || r0 < '1'
-                    || r0 > '7'
-                    || r1 < '1'
-                    || r1 > '7') {
-                return false;
-            }
-            PieceColor destColor = get(move.toIndex());
-            if (destColor != EMPTY) {
-                return false;
-            } else {
-                return move.isExtend() || move.isJump();
-            }
-        }
     }
 
     /** Return true iff player WHO can move, ignoring whether it is
@@ -166,11 +134,15 @@ class Board {
                 if (get(c, r) == who) {
                     for (int i = -2; i <= 2; i++) {
                         for (int j = -2; j <= 2; j++) {
-                            if (i != 0 && j != 0) {
+                            if (i != 0 || j != 0) {
                                 char c2 = (char) (c + i);
                                 char r2 = (char) (r + j);
-                                if (legalMoveNoColor(c, r, c2, r2)) {
-                                    return true;
+                                if (c2 >= 'a'
+                                        && c2 <= 'g'
+                                        && r2 >= '1'
+                                        && r2 <= '7'
+                                        && get(c2, r2) == EMPTY) {
+                                    return false;
                                 }
                             }
                         }
@@ -178,18 +150,13 @@ class Board {
                 }
             }
         }
-        return false;
+        return true;
     }
 
     /** Assuming MOVE has the format "-" or "C0R0-C1R1", make the denoted
      *  move ("-" means "pass"). */
     void makeMove(String move) {
-        if (move.equals("-")) {
-            makeMove(Move.pass());
-        } else {
-            makeMove(Move.move(move.charAt(0), move.charAt(1), move.charAt(3),
-                               move.charAt(4)));
-        }
+        makeMove(Move.move(move));
     }
 
     /** Perform the move C0R0-C1R1, or pass if C0 is '-'.  For moves
@@ -261,7 +228,7 @@ class Board {
     /** Update to indicate that the current player passes, assuming it
      *  is legal to do so. Passing is undoable. */
     void pass() {
-        assert !canMove(_whoseMove);
+        assert canMove(_whoseMove);
         startUndo();
         _whoseMove = _whoseMove.opposite();
         announce();
@@ -340,7 +307,7 @@ class Board {
         } else if (r == row || c == col) {
             _totalOpen += 2;
         }
-        if (!canMove(RED) && !canMove(BLUE)) {
+        if (canMove(RED) && canMove(BLUE)) {
             _winner = EMPTY;
         }
         announce();
@@ -438,7 +405,7 @@ class Board {
             _winner = BLUE;
         } else if (bluePieces() == 0) {
             _winner = RED;
-        } else if ((!canMove(RED) && !canMove(BLUE))
+        } else if ((canMove(RED) && canMove(BLUE))
                 || numJumps() == JUMP_LIMIT) {
             if (bluePieces() > redPieces()) {
                 _winner = BLUE;

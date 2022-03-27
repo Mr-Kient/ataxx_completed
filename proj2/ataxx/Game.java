@@ -97,11 +97,13 @@ class Game {
 
     /** Perform the move denoted by MOVESTR, which must be legal. */
     void makeMove(String moveStr) {
-        Move move = Move.move(moveStr);
-        if (_board.legalMove(move)) {
-            _board.makeMove(move);
-        } else {
-            throw error("illegal move");
+        try {
+            _board.makeMove(moveStr);
+        } catch (GameException e) {
+            throw error("illegal move for "
+                    + _board.whoseMove()
+                    + "'s move "
+                    + moveStr);
         }
         if (_verbose) {
             printBoard();
