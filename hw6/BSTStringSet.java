@@ -6,7 +6,7 @@ import java.util.Stack;
 
 /**
  * Implementation of a BST based String Set.
- * @author
+ * @author Darren Wang
  */
 public class BSTStringSet implements StringSet, Iterable<String> {
     /** Creates a new empty set. */
@@ -16,19 +16,97 @@ public class BSTStringSet implements StringSet, Iterable<String> {
 
     @Override
     public void put(String s) {
-        // FIXME: PART A
+        if (_root == null) {
+            _root = new Node(s);
+        } else {
+            Node curr = _root;
+            while (true) {
+                if (s.compareTo(curr.s) < 0) {
+                    if (curr.left == null) {
+                        curr.left = new Node(s);
+                        break;
+                    } else {
+                        curr = curr.left;
+                    }
+                } else if (s.compareTo(curr.s) > 0) {
+                    if (curr.right == null) {
+                        curr.right = new Node(s);
+                        break;
+                    } else {
+                        curr = curr.right;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
     }
 
     @Override
     public boolean contains(String s) {
-        return false; // FIXME: PART A
+        Node curr = _root;
+        while (curr != null) {
+            if (s.compareTo(curr.s) < 0) {
+                curr = curr.left;
+            } else if (s.compareTo(curr.s) > 0) {
+                curr = curr.right;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public List<String> asList() {
-        return null; // FIXME: PART A. MUST BE IN SORTED ORDER, ASCENDING
+        List<String> all = new ArrayList<>();
+        if (_root == null) {
+            return all;
+        }
+        all.add(_root.s);
+        Node rightAll = _root.right;
+        while (rightAll != null) {
+            all.add(rightAll.s);
+            rightAll = rightAll.right;
+        }
+        Node leftAll = _root.left;
+        while (leftAll != null) {
+            all.add(0, leftAll.s);
+            leftAll = leftAll.left;
+        }
+        return all;
     }
 
+    /** Left of the Node n.
+     * @param n current node. */
+    public String Left(Node n) {
+        if (n != null && n.left != null) {
+            return n.left.s;
+        }
+        return "null";
+    }
+
+    /** Right of the Node n.
+     * @param n current node. */
+    public String Right(Node n) {
+        if (n != null && n.right != null) {
+            return n.right.s;
+        }
+        return "null";
+    }
+
+    /** Root String. */
+    public String RootString() {
+        if (_root != null) {
+            return _root.s;
+        }
+        return "null";
+    }
+
+    /** Root. */
+    public Node Root() {
+        return _root;
+    }
 
     /** Represents a single Node of the tree. */
     private static class Node {
@@ -95,12 +173,45 @@ public class BSTStringSet implements StringSet, Iterable<String> {
         return new BSTIterator(_root);
     }
 
-    // FIXME: UNCOMMENT THE NEXT LINE FOR PART B
-    // @Override
     public Iterator<String> iterator(String low, String high) {
-        return null;  // FIXME: PART B (OPTIONAL)
+        return new BSTBoundIterator(new BSTIterator(_root), low, high);
     }
 
+    /** An iterator over BSTs with bounds. */
+    private static class BSTBoundIterator implements Iterator<String> {
+        public BSTBoundIterator(Iterator iterator, String low, String high) {
+            _iterator = iterator;
+            _low = low;
+            _high = high;
+        }
+
+        public void setNext() {
+            while (_iterator.hasNext()) {
+                String next = (String) _iterator.next();
+                if (next.compareTo(_low) >= 0 && next.compareTo(_high) <= 0) {
+                    _next = next;
+                    break;
+                }
+                _next = " ";
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            setNext();
+            return !_next.equals(" ");
+        }
+
+        @Override
+        public String next() {
+            return _next;
+        }
+
+        private String _low;
+        private String _high;
+        private Iterator _iterator;
+        private String _next = " ";
+    }
 
     /** Root node of the tree. */
     private Node _root;

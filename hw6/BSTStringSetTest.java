@@ -1,16 +1,35 @@
+import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Test of a BST-based String Set.
- * @author
+ * @author Darren Wang
  */
 public class BSTStringSetTest  {
-    // FIXME: Add your own tests for your BST StringSet
 
     @Test
-    public void testNothing() {
-        // FIXME: Delete this function and add your own tests
+    public void testAll() {
+        BSTStringSet s = new BSTStringSet();
+        s.put("Cat");
+        List<String> sList = new ArrayList<>();
+        sList.add("Cat");
+        assertTrue(s.contains("Cat"));
+        assertEquals(sList.size(), s.asList().size());
+        assertEquals(sList, s.asList());
+        s.put("Cob");
+        s.put("Boo");
+        sList.add(0, "Boo");
+        sList.add("Cob");
+        assertEquals("Cat", s.RootString());
+        assertEquals("Boo", s.Left(s.Root()));
+        assertEquals("Cob", s.Right(s.Root()));
+        assertTrue(s.contains("Cob"));
+        assertTrue(s.contains("Boo"));
+        assertEquals(sList.size(), s.asList().size());
+        assertEquals(sList, s.asList());
     }
 }

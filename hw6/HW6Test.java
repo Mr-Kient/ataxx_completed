@@ -1,4 +1,4 @@
-/** Tests of HW5
+/** Tests of HW6
  *  @author P. N. Hilfinger
  */
 public class HW6Test {
