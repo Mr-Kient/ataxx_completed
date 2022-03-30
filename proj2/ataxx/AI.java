@@ -96,8 +96,11 @@ class AI extends Player {
                 if (beta <= alpha) {
                     break;
                 }
-                return bestValue;
             }
+            if (bestValue == -INFTY) {
+                return 0;
+            }
+            return bestValue;
         } else {
             bestValue = INFTY;
             ArrayList<Move> listOfMoves =
@@ -115,10 +118,12 @@ class AI extends Player {
                 if (beta <= alpha) {
                     break;
                 }
-                return bestValue;
             }
+            if (bestValue == INFTY) {
+                return 0;
+            }
+            return bestValue;
         }
-        return 0;
     }
 
     /** Return a heuristic value for BOARD.  This value is +- WINNINGVALUE in
