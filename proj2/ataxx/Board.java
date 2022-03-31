@@ -172,7 +172,7 @@ class Board {
     /** Make the MOVE on this Board, assuming it is legal. */
     void makeMove(Move move) {
         if (!legalMove(move) || getWinner() != null) {
-            throw error("Illegal move: %s", move);
+            return;
         }
         if (move.isPass()) {
             pass();

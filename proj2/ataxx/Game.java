@@ -4,6 +4,8 @@
 
 package ataxx;
 
+import java.util.Objects;
+
 import static ataxx.PieceColor.*;
 import static ataxx.GameException.error;
 import static ataxx.Utils.*;
@@ -88,23 +90,12 @@ class Game {
      *  prompt, if needed. */
     String getCommand(String prompt) {
         String cmnd = _inp.getCommand(prompt);
-        if (cmnd == null) {
-            return "quit";
-        } else {
-            return cmnd;
-        }
+        return Objects.requireNonNullElse(cmnd, "quit");
     }
 
     /** Perform the move denoted by MOVESTR, which must be legal. */
     void makeMove(String moveStr) {
-        try {
-            _board.makeMove(moveStr);
-        } catch (GameException e) {
-            throw error("illegal move for "
-                    + _board.whoseMove()
-                    + "'s move "
-                    + moveStr);
-        }
+        _board.makeMove(moveStr);
         if (_verbose) {
             printBoard();
         }
