@@ -10,7 +10,10 @@ public class Main {
     static final File CWD = new File(".");
 
     /** Main metadata folder. */
-    static final File CAPERS_FOLDER = null; // FIXME
+    static final File CAPERS_FOLDER = new File(".capers");
+
+    /** Story folder. */
+    static final File STORY_FILE = Utils.join(CAPERS_FOLDER, "story");
 
     /**
      * Runs one of three commands:
@@ -46,14 +49,11 @@ public class Main {
         }
         setupPersistence();
         switch (args[0]) {
-        case "story":
-            writeStory(args);
-            break;
-        // FIXME
-        default:
-            exitWithError(String.format("Unknown command: %s", args[0]));
+            case "story" -> writeStory(args);
+            case "dog" -> makeDog(args);
+            case "birthday" -> celebrateBirthday(args);
+            default -> exitWithError(String.format("Unknown command: %s", args[0]));
         }
-        return;
     }
 
     /**
@@ -67,7 +67,15 @@ public class Main {
      *
      */
     public static void setupPersistence() {
-        // FIXME
+        if (!CWD.exists()) {
+            CWD.mkdir();
+        }
+        if (!CAPERS_FOLDER.exists()) {
+            CAPERS_FOLDER.mkdir();
+        }
+        if (!Dog.DOG_FOLDER.exists()) {
+            Dog.DOG_FOLDER.mkdir();
+        }
     }
 
     /**
@@ -77,7 +85,8 @@ public class Main {
      */
     public static void writeStory(String[] args) {
         validateNumArgs("story", args, 2);
-        // FIXME
+        Utils.writeContents(STORY_FILE, args[1] + "\n");
+        System.out.println(Utils.readContentsAsString(STORY_FILE));
     }
 
     /**
@@ -88,7 +97,9 @@ public class Main {
      */
     public static void makeDog(String[] args) {
         validateNumArgs("dog", args, 4);
-        // FIXME
+        Dog dog = new Dog(args[1], args[2], Integer.parseInt(args[3]));
+        dog.saveDog();
+        System.out.println(dog);
     }
 
     /**
@@ -99,7 +110,9 @@ public class Main {
      */
     public static void celebrateBirthday(String[] args) {
         validateNumArgs("birthday", args, 2);
-        // FIXME
+        Dog dog = Dog.fromFile(args[1]);
+        dog.haveBirthday();
+        dog.saveDog();
     }
 
     /**

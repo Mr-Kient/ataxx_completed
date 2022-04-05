@@ -1,15 +1,18 @@
 package capers;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import static capers.Main.CAPERS_FOLDER;
+import static capers.Utils.*;
 
 /** Represents a dog that can be serialized.
  * @author Sean Dooher
 */
-public class Dog { // FIXME
+public class Dog implements Serializable {
 
     /** Folder that dogs live in. */
-    static final File DOG_FOLDER = null; // FIXME
+    static final File DOG_FOLDER = Utils.join(CAPERS_FOLDER, "dogs");
 
     /**
      * Creates a dog object with the specified parameters.
@@ -31,24 +34,29 @@ public class Dog { // FIXME
      * @return Dog read from file
      */
     public static Dog fromFile(String name) {
-        // FIXME
-        return null;
+        File thisdog = Utils.join(DOG_FOLDER, name);
+        if (!thisdog.exists()) {
+            throw new IllegalArgumentException();
+        }
+        return readObject(thisdog, Dog.class);
     }
 
-    /**
-     * Increases a dog's age and celebrates!
-     */
+    /** Increases a dog's age and celebrates! */
     public void haveBirthday() {
         _age += 1;
         System.out.println(toString());
         System.out.println("Happy birthday! Woof! Woof!");
     }
 
-    /**
-     * Saves a dog to a file for future use.
-     */
+    /** Saves a dog to a file for future use. */
     public void saveDog() {
-        // FIXME
+        File thisdog = Utils.join(DOG_FOLDER, this._name);
+        try {
+            thisdog.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        writeObject(thisdog, this);
     }
 
     @Override
