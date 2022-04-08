@@ -85,7 +85,12 @@ public class Main {
      */
     public static void writeStory(String[] args) {
         validateNumArgs("story", args, 2);
-        Utils.writeContents(STORY_FILE, args[1] + "\n");
+        if (!STORY_FILE.exists()) {
+            Utils.writeContents(STORY_FILE, args[1] + "\n");
+        } else {
+            String after = Utils.readContentsAsString(STORY_FILE) + args[1] + "\n";
+            Utils.writeContents(STORY_FILE, after);
+        }
         System.out.println(Utils.readContentsAsString(STORY_FILE));
     }
 

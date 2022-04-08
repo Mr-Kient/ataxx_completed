@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="715b7550-a0f7-4f24-81e9-c83af05172a5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.capers/dogs/Sammie" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.capers/story" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/lab12.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capers/Dog.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capers/Main.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capers/Utils.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capers/sentinel" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capers/Dog.java" beforeDir="false" afterPath="$PROJECT_DIR$/capers/Dog.java" afterDir="false" />
+    <list default="true" id="715b7550-a0f7-4f24-81e9-c83af05172a5" name="Changes" comment="Lab 12 finished">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capers/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/capers/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capers/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/capers/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capers/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/capers/Utils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +34,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -79,8 +70,26 @@
       <workItem from="1649131899110" duration="620000" />
       <workItem from="1649136290653" duration="412000" />
       <workItem from="1649136710754" duration="2510000" />
-      <workItem from="1649143939614" duration="5026000" />
+      <workItem from="1649143939614" duration="5166000" />
+      <workItem from="1649447951191" duration="2160000" />
+      <workItem from="1649450205907" duration="272000" />
+      <workItem from="1649450571318" duration="207000" />
     </task>
+    <task id="LOCAL-00001" summary="Lab 12 finished">
+      <created>1649149132297</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1649149132297</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Lab 12 finished">
+      <created>1649149140394</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1649149140394</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -99,5 +108,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Lab 12 finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lab 12 finished" />
   </component>
 </project>
