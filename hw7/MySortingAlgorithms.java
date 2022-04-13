@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import static java.lang.System.arraycopy;
+
 /**
  * Note that every sorting algorithm takes in an argument k. The sorting 
  * algorithm should sort the array from index 0 to k. This argument could
@@ -42,7 +44,20 @@ public class MySortingAlgorithms {
     public static class InsertionSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            if (array == null || k < 1) {
+                return;
+            }
+            int j;
+            for (int i = 1; i < k; i++) {
+                int curr = array[i];
+                for (j = i - 1; j >= 0; j--) {
+                    if (array[j] < curr) {
+                        break;
+                    }
+                    array[j + 1] = array[j];
+                }
+                array[j + 1] = curr;
+            }
         }
 
         @Override
@@ -60,7 +75,20 @@ public class MySortingAlgorithms {
     public static class SelectionSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            if (array == null || k < 1) {
+                return;
+            }
+            for (int i = 0; i < k; i++) {
+                int min = array[i];
+                int minindex = i;
+                for (int j = i + 1; j < k; j++) {
+                    if (array[j] < min) {
+                        min = array[j];
+                        minindex = j;
+                    }
+                }
+                swap(array, minindex, i);
+            }
         }
 
         @Override
@@ -77,10 +105,35 @@ public class MySortingAlgorithms {
     public static class MergeSort implements SortingAlgorithm {
         @Override
         public void sort(int[] array, int k) {
-            // FIXME
+            if (array == null || k < 1) {
+                return;
+            }
+            sortHelper(array, 0, k);
         }
 
-        // may want to add additional methods
+        private void sortHelper(int[] array, int lower, int upper) {
+            if (upper <= lower || upper - lower == 1) {
+                return;
+            }
+            int mid = (lower + upper) / 2;
+            sortHelper(array, lower, mid);
+            sortHelper(array, mid, upper);
+            mergeHelper(array, lower, mid, upper);
+        }
+
+        private void mergeHelper(int[] array, int lower, int mid, int upper) {
+            int j;
+            for (int i = mid; i < upper; i++) {
+                int curr = array[i];
+                for (j = i - 1; j >= lower; j--) {
+                    if (array[j] < curr) {
+                        break;
+                    }
+                    array[j + 1] = array[j];
+                }
+                array[j + 1] = curr;
+            }
+        }
 
         @Override
         public String toString() {
@@ -148,7 +201,41 @@ public class MySortingAlgorithms {
     public static class LSDSort implements SortingAlgorithm {
         @Override
         public void sort(int[] a, int k) {
-            // FIXME
+            if (a == null || k < 1) {
+                return;
+            }
+            int digit = countMaxDigit(a, k);
+            for (int i = 0; i < digit; i++) {
+                sortHelper(a, k, i);
+            }
+        }
+        private int countMaxDigit(int[] a, int k) {
+            int max = a[0];
+            for (int i = 1; i < k; i++) {
+                max = Math.max(max, a[i]);
+            }
+            int num = 0;
+            while (max > 0) {
+                num++;
+                max >>= 1;
+            }
+            return num;
+        }
+
+        private void sortHelper(int[] a, int k, int digit) {
+            int MASK = (1 << (digit + 1)) - 1;
+            int[] counts = new int[2];
+            int[] output = new int[k];
+            for (int i = 0; i < k; i++) {
+                int c = (a[i] & MASK) >> digit;
+                counts[c]++;
+            }
+            counts[1] += counts[0];
+            for (int i = k - 1; i >= 0; i--) {
+                int c = (a[i] & MASK) >> digit;
+                output[counts[c]-- - 1] = a[i];
+            }
+            arraycopy(output, 0, a, 0, k);
         }
 
         @Override

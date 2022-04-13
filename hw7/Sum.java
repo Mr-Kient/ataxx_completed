@@ -1,5 +1,5 @@
 /** HW #7, Two-sum problem.
- * @author
+ * @author Darren Wang
  */
 public class Sum {
 
