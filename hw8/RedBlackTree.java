@@ -125,7 +125,6 @@ public class RedBlackTree<T extends Comparable<T>> {
         // Insert (return) new red leaf node.
         if (node == null) {
             node = new RBTreeNode<>(false, item);
-            return node;
         }
 
         // Handle normal binary search tree insertion.
@@ -140,12 +139,12 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         // handle case C and "Right-leaning" situation.
         if (isRed(node.right) && !isRed(node.left)) {
-            rotateLeft(node);
+            node = rotateLeft(node);
         }
 
         // handle case B
         if (isRed(node.left) && isRed(node.left.left)) {
-            rotateRight(node);
+            node = rotateRight(node);
         }
 
         // handle case A

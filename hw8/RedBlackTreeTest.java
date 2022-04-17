@@ -148,7 +148,7 @@ public class RedBlackTreeTest {
         doTest(new Integer[] { 1 }, 123L);
     }
 
-    /* Test inserting just a 3 elements.
+    /* Test inserting 3 elements.
      * Note that the seed passed in has L at the end to indicate
      * that it is a LONG number type. */
     @Test
@@ -157,6 +157,16 @@ public class RedBlackTreeTest {
     }
 
     // TODO: Create a larger test?
+
+    /* Test inserting 40 elements.
+     * Note that the seed passed in has L at the end to indicate
+     * that it is a LONG number type. */
+    @Test
+    public void longTest() {
+        doTest(new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+                31, 32, 33, 34, 35, 36, 37, 38, 39, 40 }, 123456789L);
+    }
 
     // TODO: Create tests that targets each of case A, B, and C?
 
