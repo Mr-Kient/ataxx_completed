@@ -1,77 +1,130 @@
 # Gitlet Design Document
-author:
-
-## Design Document Guidelines
-
-Please use the following format for your Gitlet design document. Your design
-document should be written in markdown, a language that allows you to nicely 
-format and style a text file. Organize your design document in a way that 
-will make it easy for you or a course-staff member to read.  
+Author: Darren Wang
 
 ## 1. Classes and Data Structures
 
-Include here any class definitions. For each class list the instance
-variables and static variables (if any). Include a ***brief description***
-of each variable and its purpose in the class. Your explanations in
-this section should be as concise as possible. Leave the full
-explanation to the following sections. You may cut this section short
-if you find your document is too wordy.
+The program mainly consists of the following java classes.
+* `Main`
+* `File`
+* `Object`
+* `Command`\
+and
+* `Diff`
+* `Utils`
+* `GitletException`\
+which are already provided.
 
+### a. `Main`
+
+This class is designed as the main component of this program utilizing
+all other classes to fulfill the function that the program is designed
+to achieve, like version control, file submission, etc. It is basically
+like the **.exe** files for Windows OS or **.app** files for MacOS if 
+you are not familiar with the weird computer terminologies.
+
+`Main` takes in your command as its input argument, and will validate 
+it within the class to avoid some nonsense commands, e.g., do you like
+Prof. Hilfinger, write the hw for me, etc.
+
+### b. `File`
+
+This class is designed for representing any necessary file for recording
+its related information and files, e.g., BRANCH, HEAD, etc. It works 
+like cache in the computers so that your current working status would
+not be missing after closing or restarting the program.
+
+### c. `Object`
+
+This class is designed for representing any object in the system. 
+It could be branches, head, the file you want to save, etc.
+
+### d. `Command`
+
+This class represents all the commands that the program could read. 
+Imagine you are using Git, and this class is the things you can type
+in the CMD or Terminal that the program could receive and then execute,
+e.g., add, commit, log, status, etc.
+
+### e. `Diff`
+
+A comparison of two sequences of strings. After executing setSequences 
+to initialize the data, methods allow computing the longest common sequences 
+and differences in the form of edits needed to convert one sequence to 
+the next.
+--P. N. Hilfinger
+
+### f. `Utils`
+
+The associated utilities for certain functions to work, e.g., filing
+sentences (writeContent, readContent, join, etc.). Made by P. N. Hilfinger.
+
+### g. `GitletException`
+
+General exception indicating a Gitlet error.  For fatal errors, the result
+of .getMessage() is the error message to be printed.
+--P. N. Hilfinger
 
 ## 2. Algorithms
 
-This is where you tell us how your code works. For each class, include
-a high-level description of the methods in that class. That is, do not
-include a line-by-line breakdown of your code, but something you would
-write in a javadoc comment above a method, ***including any edge cases
-you are accounting for***. We have read the project spec too, so make
-sure you do not repeat or rephrase what is stated there.  This should
-be a description of how your code accomplishes what is stated in the
-spec.
+### a. `Main`
 
+#### i. void Main(String[])
 
-The length of this section depends on the complexity of the task and
-the complexity of your design. However, simple explanations are
-preferred. Here are some formatting tips:
+The main algorithm. It takes in the commands as a string list argument and 
+then call appropriate funtions and classes to fulfill its designed functionality.
 
-* For complex tasks, like determining merge conflicts, we recommend
-  that you split the task into parts. Describe your algorithm for each
-  part in a separate section. Start with the simplest component and
-  build up your design, one piece at a time. For example, your
-  algorithms section for Merge Conflicts could have sections for:
+#### ii. void validate()
 
-   * Checking if a merge is necessary.
-   * Determining which files (if any) have a conflict.
-   * Representing the conflict in the file.
-  
-* Try to clearly mark titles or names of classes with white space or
-  some other symbols.
+The helper function for the Main function. It is used for validating the input command
+to see if it is executable. A GitletException would be thrown if the command is not executable.
+
+### b. `File`
+
+#### i. File object
+
+#### ii. File head
+
+#### iii. File branch
+
+### c. `Object`
+
+#### i. String type
+
+#### ii. String timestamp
+
+#### iii. String content
+
+#### iv. String message
+
+### d. `Command`
+
+#### i. void commit(String)
+
+#### ii. void add(String)
+
+#### iii. void log()
+
+#### iv. void status()
+
+#### v. void branch(String)
+
+#### vi. void reset(String)
+
+#### vii. void checkout(String)
+
+### e. `Diff`
+
+### f. `Utils`
+
+### g. `GitletException`
 
 ## 3. Persistence
 
-Describe your strategy for ensuring that you don’t lose the state of your program
-across multiple runs. Here are some tips for writing this section:
-
-* This section should be structured as a list of all the times you
-  will need to record the state of the program or files. For each
-  case, you must prove that your design ensures correct behavior. For
-  example, explain how you intend to make sure that after we call
-       `java gitlet.Main add wug.txt`,
-  on the next execution of
-       `java gitlet.Main commit -m “modify wug.txt”`, 
-  the correct commit will be made.
-  
-* A good strategy for reasoning about persistence is to identify which
-  pieces of data are needed across multiple calls to Gitlet. Then,
-  prove that the data remains consistent for all future calls.
-  
-* This section should also include a description of your .gitlet
-  directory and any files or subdirectories you intend on including
-  there.
+We used java `File` class to create and save necessary files or cache.
+All the files related would be saved to the root/.gitlet workspace
+for further usage.
 
 ## 4. Design Diagram
 
-Attach a picture of your design diagram illustrating the structure of your
-classes and data structures. The design diagram should make it easy to 
-visualize the structure and workflow of your program.
+![](C:\Users\Darren\Documents\Documents\Berkeley\Year_1_Sem_2\CS61B\repo\proj3\gitlet-design.png)
 
