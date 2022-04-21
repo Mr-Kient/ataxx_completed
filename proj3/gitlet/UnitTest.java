@@ -18,7 +18,7 @@ public class UnitTest {
     /** A dummy test to avoid complaint. */
     @Test
     public void placeholderTest() {
-
+        System.out.println("passed");
     }
 
 }

@@ -2,9 +2,7 @@ package gitlet;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
 import static gitlet.Utils.*;
 import static gitlet.Objects.*;
 import static gitlet.Index.*;
@@ -28,7 +26,7 @@ public class Files {
      * @return sha1 of the object.
      */
     static String writeObject(Objects Object) {
-        String sha1 = sha1(Object);
+        String sha1 = sha1(serialize(Object));
         join(OBJECTS, getHeadHash(sha1)).mkdir();
         File file = getObjectsFile(sha1);
 

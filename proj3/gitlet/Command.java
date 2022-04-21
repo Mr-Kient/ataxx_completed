@@ -53,6 +53,10 @@ public class Command {
             currHead = curr.getParent();
             curr = readObject(getObjectsFile(curr.getParent()), Objects.class);
         }
+        content.append("=== \n")
+                .append("commit ").append(currHead).append("\n")
+                .append("Date: ").append(curr.getTimestamp()).append("\n")
+                .append(curr.getMsg()).append("\n\n");
 
         System.out.println(content);
     }
@@ -75,6 +79,11 @@ public class Command {
                 currHead = curr.getParent();
                 curr = readObject(getObjectsFile(curr.getParent()), Objects.class);
             }
+
+            content.append("=== \n")
+                    .append("commit ").append(currHead).append("\n")
+                    .append("Date: ").append(curr.getTimestamp()).append("\n")
+                    .append(curr.getMsg()).append("\n\n");
 
             System.out.println(content);
         }
