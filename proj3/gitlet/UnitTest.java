@@ -18,7 +18,9 @@ public class UnitTest {
     /** A dummy test to avoid complaint. */
     @Test
     public void placeholderTest() {
-        System.out.println("passed");
+        //I will not be using the unit test for checkpoint
+        //but i cannot use Make to compile it so i have to move it out
+        //of the folder and it might not be able to be compiled right now.
     }
 
 }
