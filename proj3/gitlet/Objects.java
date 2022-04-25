@@ -17,6 +17,9 @@ public class Objects implements Serializable {
     Objects() {
         type = "commit";
         Date date = new Date(0);
+        //Because my computer system is Chinese.
+        //Also, I did not get how to use the Format function,
+        //thus I self learned SimpleDateFormat online.
         timestamp = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy Z",
                 new Locale("en")).format(date);
         msg = "initial commit";
@@ -54,10 +57,12 @@ public class Objects implements Serializable {
     public void makeCommit(String msg) {
         type = "commit";
         Date date = new Date();
+        //Same cause.
         timestamp = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy Z",
                 new Locale("en")).format(date);
         parent = new LinkedList<>();
         parent.add(getCurrHead());
+        //same variable name problem...
         this.msg = msg;
     }
 
@@ -94,5 +99,9 @@ public class Objects implements Serializable {
     private String msg;
     private String fileName;
     private LinkedList<String> parent;
+
+    /*  */
+    //It turns out it have to be public because we need to read and insert
+    //elements in other classes.
     public HashMap<String, Index> index;
 }

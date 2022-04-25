@@ -76,7 +76,7 @@ public class Files {
     }
 
 
-    /* The strategy to save files in this system is to use its sha1 code.
+    /* The strategy to save files in this system is to use its sha1 code like Git does.
      * E.g., we have a new file whose sha1 code is 0b2a40250fe9328e751984616...
      * The system would save the file in
      * CWD -> OBJECTS -> 0b -> 2a40250fe9328e751984616...
