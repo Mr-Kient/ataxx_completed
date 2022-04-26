@@ -41,16 +41,22 @@ public class Command {
     }
 
     static void log() {
+        Objects curr = getCurrHeadCommit();
         StringBuilder content = new StringBuilder();
-        List<String> pastCommits = pastCommits(getCurrHead());
+        String currHead = getCurrHead();
 
-        for (String currHash : pastCommits) {
-            Objects curr = readObject(getObjectsFile(currHash), Objects.class);
+        while (!curr.getParent().equals("")) {
             content.append("=== \n")
-                    .append("commit ").append(currHash).append("\n")
+                    .append("commit ").append(currHead).append("\n")
                     .append("Date: ").append(curr.getTimestamp()).append("\n")
                     .append(curr.getMsg()).append("\n\n");
+            currHead = curr.getParent();
+            curr = readObject(getObjectsFile(curr.getParent()), Objects.class);
         }
+        content.append("=== \n")
+                .append("commit ").append(currHead).append("\n")
+                .append("Date: ").append(curr.getTimestamp()).append("\n")
+                .append(curr.getMsg()).append("\n\n");
 
         System.out.println(content);
     }
