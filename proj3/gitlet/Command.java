@@ -41,22 +41,16 @@ public class Command {
     }
 
     static void log() {
-        Objects curr = getCurrHeadCommit();
         StringBuilder content = new StringBuilder();
-        String currHead = getCurrHead();
+        List<String> pastCommits = pastCommits(readContentsAsString(CURR_HEAD));
 
-        while (!curr.getParent().equals("")) {
+        for (String currHead : pastCommits) {
+            Objects curr = readObject(getObjectsFile(currHead), Objects.class);
             content.append("=== \n")
                     .append("commit ").append(currHead).append("\n")
                     .append("Date: ").append(curr.getTimestamp()).append("\n")
                     .append(curr.getMsg()).append("\n\n");
-            currHead = curr.getParent();
-            curr = readObject(getObjectsFile(curr.getParent()), Objects.class);
         }
-        content.append("=== \n")
-                .append("commit ").append(currHead).append("\n")
-                .append("Date: ").append(curr.getTimestamp()).append("\n")
-                .append(curr.getMsg()).append("\n\n");
 
         System.out.println(content);
     }
@@ -98,7 +92,7 @@ public class Command {
     }
 
     static void checkoutPastFile(String sha1, String file) {
-        String currHead = getCurrHead();
+        String currHead = readContentsAsString(CURR_HEAD);
         List<String> pastCommits = pastCommits(currHead);
         File pastFile = null;
 
