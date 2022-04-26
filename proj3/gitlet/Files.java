@@ -123,12 +123,6 @@ public class Files {
         return readContentsAsString(branchHead);
     }
 
-    /* Get the commit as an Object for the given sha1 of the branch. */
-    static Objects getHeadCommitGeneral(String branchHash) {
-        File commit = getObjectsFile(getHeadGeneral(branchHash));
-        return readObject(commit, Objects.class);
-    }
-
     /* Get history of commits under current Branch. Saved as a List. */
     static List<String> pastCommits(String headHash) {
         String currHash = readContentsAsString(join(BRANCHES, headHash));

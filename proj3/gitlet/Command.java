@@ -131,7 +131,7 @@ public class Command {
 
     }
 
-    static void reset(String hash) {
+    static void reset(String sha1) {
 
     }
 
