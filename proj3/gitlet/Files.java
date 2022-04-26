@@ -31,6 +31,11 @@ public class Files {
                     = Utils.readContentsAsString(CURR_HEAD);
             writeHead(currHead);
             updateBranchHead(currHead, sha1);
+        } else {
+            Objects stageList = readObject(INDEX, Objects.class);
+            Index update = new Index(sha1, Object.getFileName());
+            stageList.index.put(Object.getFileName(), update);
+            Utils.writeObject(INDEX, stageList);
         }
         Utils.writeObject(file, Object);
     }
