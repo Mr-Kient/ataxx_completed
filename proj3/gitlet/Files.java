@@ -116,12 +116,12 @@ public class Files {
 
     /* Get history of commits under current Branch. Saved as a List. */
     static List<String> pastCommits(String headHash) {
-        String currHead = headHash;
+        String currHash = readContentsAsString(join(BRANCHES, headHash));
         List<String> pastCommits = new ArrayList<>();
-        while (!currHead.equals("")) {
-            pastCommits.add(currHead);
-            Objects currCommit = getObjectsHash(currHead);
-            currHead = currCommit.getParent();
+        while (!currHash.equals("")) {
+            pastCommits.add(currHash);
+            Objects currCommit = getObjectsHash(currHash);
+            currHash = currCommit.getParent();
         }
         return pastCommits;
     }
