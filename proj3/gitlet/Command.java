@@ -61,23 +61,16 @@ public class Command {
             return;
         }
         for (String commit : allCommitHistory) {
-            Objects curr = getHeadCommitGeneral(commit);
             StringBuilder content = new StringBuilder();
-            String currHead = getCurrHead();
+            List<String> pastCommits = pastCommits(commit);
 
-            while (!curr.getParent().equals("")) {
+            for (String currHead : pastCommits) {
+                Objects curr = readObject(getObjectsFile(currHead), Objects.class);
                 content.append("=== \n")
                         .append("commit ").append(currHead).append("\n")
                         .append("Date: ").append(curr.getTimestamp()).append("\n")
                         .append(curr.getMsg()).append("\n\n");
-                currHead = curr.getParent();
-                curr = readObject(getObjectsFile(curr.getParent()), Objects.class);
             }
-
-            content.append("=== \n")
-                    .append("commit ").append(currHead).append("\n")
-                    .append("Date: ").append(curr.getTimestamp()).append("\n")
-                    .append(curr.getMsg()).append("\n\n");
 
             System.out.println(content);
         }
