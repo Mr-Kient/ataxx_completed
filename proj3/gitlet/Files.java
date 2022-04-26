@@ -110,8 +110,8 @@ public class Files {
     }
 
     /* Get history of commits under current Branch. Saved as a List. */
-    static List<String> pastCommits(String branchHash) {
-        String currHead = getHeadGeneral(branchHash);
+    static List<String> pastCommits(String headHash) {
+        String currHead = headHash;
         List<String> pastCommits = new ArrayList<>();
         while (!currHead.equals("")) {
             pastCommits.add(currHead);
