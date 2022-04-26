@@ -21,7 +21,7 @@ public class Files {
 
     /* Write Objects in the OBJECTS directory.
      * Save by the first 2 letters of sha1 (same as Git). */
-    static String writeObject(Objects Object) {
+    static void writeObject(Objects Object) {
         String sha1 = sha1(serialize(Object));
         join(OBJECTS, getHeadHash(sha1)).mkdir();
         File file = getObjectsFile(sha1);
@@ -33,18 +33,26 @@ public class Files {
             updateBranchHead(currBranch, sha1);
             Utils.writeObject(file, Object);
         } else {
-            writeStagedToIndex(sha1, Object.getFileName());
-            Utils.writeObject(file, Object);
+            if (writeStagedToIndex(sha1, Object.getFileName())) {
+                Utils.writeObject(file, Object);
+            }
         }
-        return sha1;
     }
 
-    static void writeStagedToIndex(String sha1, String filename) {
+    static boolean writeStagedToIndex(String sha1, String filename) {
         Objects fileList;
         fileList = readObject(INDEX, Objects.class);
+
+        if (fileList.index.containsKey(filename)) {
+            if (sha1.equals(fileList.index.get(filename).getSha1())) {
+                return false;
+            }
+        }
+
         Index updated = new Index(sha1, filename);
         fileList.index.put(filename, updated);
         Utils.writeObject(INDEX, fileList);
+        return true;
     }
 
     /* Write / update the current HEAD. */
