@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
-import static gitlet.Utils.*;
 import static gitlet.Files.*;
 
 public class Objects implements Serializable {
@@ -27,14 +26,14 @@ public class Objects implements Serializable {
         parent = new LinkedList<>();
     }
 
-
-    Objects(String name) {
-        if (name.equals("index")) {
+    /* For storing the list of files waiting for be staged. */
+    Objects(String stage) {
+        if (stage.equals("stage")) {
             index = new HashMap<>();
         }
     }
 
-
+    /* Create a blob. */
     Objects(String content, String file) {
         type = "blob";
         this.content = content;

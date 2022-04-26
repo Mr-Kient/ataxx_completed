@@ -22,14 +22,14 @@ public class Command {
         Objects toStageFiles = readObject(INDEX, Objects.class);
         Objects stageRemove = readObject(INDEX_REMOVE, Objects.class);
         if (toStageFiles.index.isEmpty() && stageRemove.index.isEmpty()) {
-            throw error("No changes added to the commit");
+            throw error("Nothing need to be committed.");
         }
+
         Objects currHead = getCurrCommit();
         currHead.updateIndex(toStageFiles, stageRemove);
         currHead.makeCommit(msg);
 
-        Files.writeObject(currHead);
-
+        writeObject(currHead);
         toStageFiles.index.clear();
         stageRemove.index.clear();
         writeObject(INDEX_REMOVE, toStageFiles);
@@ -41,22 +41,16 @@ public class Command {
     }
 
     static void log() {
-        Objects curr = getCurrCommit();
         StringBuilder content = new StringBuilder();
-        String currHead = getCurrHead();
+        List<String> pastCommits = pastCommits(getCurrHead());
 
-        while (!curr.getParent().equals("")) {
+        for (String currHash : pastCommits) {
+            Objects curr = getCommitGeneral(currHash);
             content.append("=== \n")
-                    .append("commit ").append(currHead).append("\n")
+                    .append("commit ").append(currHash).append("\n")
                     .append("Date: ").append(curr.getTimestamp()).append("\n")
                     .append(curr.getMsg()).append("\n\n");
-            currHead = curr.getParent();
-            curr = readObject(getObjectsFile(curr.getParent()), Objects.class);
         }
-        content.append("=== \n")
-                .append("commit ").append(currHead).append("\n")
-                .append("Date: ").append(curr.getTimestamp()).append("\n")
-                .append(curr.getMsg()).append("\n\n");
 
         System.out.println(content);
     }
@@ -98,8 +92,7 @@ public class Command {
     }
 
     static void checkoutPastFile(String sha1, String file) {
-        String currHead = readContentsAsString(CURR_HEAD);
-
+        String currHead = getCurrHead();
         List<String> pastCommits = pastCommits(currHead);
         File pastFile = null;
 
@@ -109,25 +102,28 @@ public class Command {
         if (pastFile == null) {
             throw error("No such commit exists.");
         }
+
         Objects commit = readObject(pastFile, Objects.class);
+
         if (!commit.index.containsKey(file)) {
-            throw error("File does not exist in that commit");
+            throw error("This file does not exist in that commit");
         }
 
         Index ver = commit.index.get(file);
-        File newFileCWD = join(file);
-        updateRepoFile(newFileCWD, ver.getSha1());
+        File newBlobLoc = join(file);
+        updateRepoFile(newBlobLoc, ver.getSha1());
     }
 
     static void checkoutHeadFile(String file) {
         Objects commit = getCurrCommit();
 
         if (!commit.index.containsKey(file)) {
-            throw error("File does not exist in that commit.");
+            throw error("This file does not exist in current commit.");
         }
+
         String hash = commit.index.get(file).getSha1();
-        File newFileCWD = join(file);
-        Files.updateRepoFile(newFileCWD, hash);
+        File newBlobLoc = join(file);
+        updateRepoFile(newBlobLoc, hash);
     }
 
     static void checkoutBranch(String branch) {
@@ -146,21 +142,7 @@ public class Command {
 
     }
 
-    static void mergeCheck(String branch) {
-
-    }
-
     static void merge(String branch) {
-
-    }
-
-    static void mergeCommit(Objects commit, String givenBranch,
-                            String givenHash)
-    {
-
-    }
-
-    static void printMergeConf(LinkedList<String> fileList, Objects curr, Objects given) {
 
     }
 }

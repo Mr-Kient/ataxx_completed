@@ -1,6 +1,5 @@
 package gitlet;
 
-import java.util.Objects;
 import static gitlet.Files.*;
 import static gitlet.Utils.*;
 import static gitlet.Command.*;
@@ -25,49 +24,33 @@ public class Main {
                 throw error("Gitlet CWD already exists.");
             }
             init();
-        }
-
-        if (cases.equals("add")) {
+        } else if (cases.equals("add")) {
             validateArg(args, 2);
             if (!join(args[1]).exists()) {
                 throw error("File does not exist.");
             }
             add(args[1]);
-        }
-
-        if (cases.equals("commit")) {
+        } else if (cases.equals("commit")) {
             if (args.length != 2) {
                 throw error("Please enter a commit message.");
             }
             commit(args[1]);
-        }
-
-        if (cases.equals("rm")) {
+        } else if (cases.equals("rm")) {
             validateArg(args, 2);
             rm(args[1]);
-        }
-
-        if (cases.equals("log")) {
+        } else if (cases.equals("log")) {
             validateArg(args, 1);
             log();
-        }
-
-        if (cases.equals("global-log")) {
+        } else if (cases.equals("global-log")) {
             validateArg(args, 1);
             globalLog();
-        }
-
-        if (cases.equals("find")) {
+        } else if (cases.equals("find")) {
             validateArg(args, 2);
             find(args[1]);
-        }
-
-        if (cases.equals("status")) {
+        } else if (cases.equals("status")) {
             validateArg(args, 1);
             status();
-        }
-
-        if (cases.equals("checkout")) {
+        } else if (cases.equals("checkout")) {
             if (args.length == 4) {
                 checkoutPastFile(args[1], args[3]);
             } else if (args.length == 3) {
@@ -78,28 +61,21 @@ public class Main {
                 throw error("Not a valid input for ",
                         "checkout");
             }
-        }
-
-        if (cases.equals("branch")) {
+        } else if (cases.equals("branch")) {
             validateArg(args, 2);
             branch(args[1]);
-        }
-
-        if (cases.equals("rm-branch")) {
+        } else if (cases.equals("rm-branch")) {
             validateArg(args, 2);
             rmBranch(args[1]);
-        }
-
-        if (cases.equals("branch")) {
+        } else if (cases.equals("reset")) {
             validateArg(args, 2);
             reset(args[1]);
-        }
-
-        if (cases.equals("merge")) {
+        } else if (cases.equals("merge")) {
             validateArg(args, 2);
             merge(args[1]);
+        } else {
+            throw error("Invalid command.");
         }
-
     }
 
     public static void validateArg(String[] args, int req) {

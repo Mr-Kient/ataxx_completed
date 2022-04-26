@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import static gitlet.Utils.*;
-import static gitlet.Objects.*;
-import static gitlet.Index.*;
 
 public class Files {
 
@@ -14,65 +12,45 @@ public class Files {
         CWD.mkdirs();
         OBJECTS.mkdirs();
         BRANCHES.mkdirs();
-        Objects fileList = new Objects("index");
+        Objects fileList = new Objects("stage");
         Utils.writeObject(INDEX, fileList);
-        Objects fileListRm = new Objects("index");
+        Objects fileListRm = new Objects("stage");
         Utils.writeObject(INDEX_REMOVE, fileListRm);
         writeContents(CURR_HEAD, "master");
     }
 
     /* Write Objects in the OBJECTS directory.
-     * Save by the first 2 letters of sha1 (same as Git).
-     * @return sha1 of the object.
-     */
-    static String writeObject(Objects Object) {
+     * Save by the first 2 letters of sha1 (same as Git). */
+    static void writeObject(Objects Object) {
         String sha1 = sha1(serialize(Object));
         join(OBJECTS, getHeadHash(sha1)).mkdir();
         File file = getObjectsFile(sha1);
 
         if (Object.getType().equals("commit")) {
-            String currBranch
+            String currHead
                     = Utils.readContentsAsString(CURR_HEAD);
-            writeHead(currBranch);
-            updateBranchHead(currBranch, sha1);
-            Utils.writeObject(file, Object);
-        } else {
-            if (writeStagedToIndex(sha1, Object.getFileName())) {
-                Utils.writeObject(file, Object);
-            }
+            writeHead(currHead);
+            updateBranchHead(currHead, sha1);
         }
-        return sha1;
+        Utils.writeObject(file, Object);
     }
 
     /* Write / update the current HEAD. */
-    static void writeHead(String branch) {
-        writeContents(CURR_HEAD, branch);
+    static void writeHead(String sha1) {
+        writeContents(CURR_HEAD, sha1);
     }
 
-    static boolean writeStagedToIndex(String sha1, String filename) {
-        Objects fileList;
-        fileList = readObject(INDEX, Objects.class);
-        /* If already exists, we do not have to rewrite it. */
-        if (fileList.index.containsKey(filename)) {
-            if (sha1.equals(fileList.index.get(filename).getSha1())) {
-                return false;
-            }
-        }
-        Index updated = new Index(sha1, filename);
-        fileList.index.put(filename, updated);
-        Utils.writeObject(INDEX, fileList);
-        return true;
-    }
-
-    /* Record the sha1 code of the very branch. */
+    /* Update the sha1 code of the Head of the very branch. */
     static void updateBranchHead(String branch, String sha1) {
         writeContents(join(BRANCHES, branch), sha1);
     }
 
-    static void updateRepoFile(File cwdNew, String blobHash) {
+    /* Put the content of given blob into a new one.
+     * For checkout use. */
+    static void updateRepoFile(File newBlobLoc, String blobHash) {
         File repo = getObjectsFile(blobHash);
         String content = Utils.readObject(repo, Objects.class).getContent();
-        Utils.writeContents(cwdNew, content);
+        Utils.writeContents(newBlobLoc, content);
     }
 
 
@@ -99,37 +77,43 @@ public class Files {
         return join(OBJECTS, getHeadHash(sha1), getBodyHash(sha1));
     }
 
+    /* Get the Object of the given sha1 hash. */
     static Objects getObjectsHash(String hash) {
         File obj = getObjectsFile(hash);
         return readObject(obj, Objects.class);
     }
 
 
-
+    /* Get current Head as a string containing its sha1. */
     static String getCurrHead() {
         String curr = readContentsAsString(CURR_HEAD);
         return getHeadGeneral(curr);
     }
 
+    /* Get current commit as an Object. */
     static Objects getCurrCommit() {
         File commit = getObjectsFile(getCurrHead());
         return readObject(commit, Objects.class);
     }
 
-    static String getHeadGeneral(String location) {
-        File branchHead = join(BRANCHES, location);
+    /* Get the Head as a string containing its sha1 for the given
+     * sha1 of the branch. */
+    static String getHeadGeneral(String branchHash) {
+        File branchHead = join(BRANCHES, branchHash);
         return readContentsAsString(branchHead);
     }
 
-    static Objects getCommitGeneral(String commitLoc) {
-        File commit = getObjectsFile(getHeadGeneral(commitLoc));
+    /* Get the commit as an Object for the given sha1 of the branch. */
+    static Objects getCommitGeneral(String branchHash) {
+        File commit = getObjectsFile(getHeadGeneral(branchHash));
         return readObject(commit, Objects.class);
     }
 
-    static List<String> pastCommits(String currBranch) {
-        String currHash = readContentsAsString(join(BRANCHES, currBranch));
+    /* Get history of commits under current Branch. Saved as a List. */
+    static List<String> pastCommits(String branchHash) {
+        String currHead = getHeadGeneral(branchHash);
         List<String> pastCommits = new ArrayList<>();
-        String commitHash = currHash;
+        String commitHash = currHead;
         while (!commitHash.equals("")) {
             pastCommits.add(commitHash);
             Objects currCommit = getObjectsHash(commitHash);
@@ -138,16 +122,10 @@ public class Files {
         return pastCommits;
     }
 
-
-
-
-
+    /* Necessary Files. */
 
     /* Current working directory. */
     static final File CWD = new File(".gitlet");
-
-    /* Logs of Gitlet. */
-    static final File LOGS = join(CWD, "logs");
 
     /* All objects needed, including commits, blobs, and trees. */
     static final File OBJECTS = join(CWD, "objects");
