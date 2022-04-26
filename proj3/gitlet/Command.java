@@ -25,7 +25,7 @@ public class Command {
             throw error("Nothing need to be committed.");
         }
 
-        Objects currHead = getCurrCommit();
+        Objects currHead = getCurrHeadCommit();
         currHead.updateIndex(toStageFiles, stageRemove);
         currHead.makeCommit(msg);
 
@@ -45,7 +45,7 @@ public class Command {
         List<String> pastCommits = pastCommits(getCurrHead());
 
         for (String currHash : pastCommits) {
-            Objects curr = getCommitGeneral(currHash);
+            Objects curr = readObject(getObjectsFile(currHash), Objects.class);
             content.append("=== \n")
                     .append("commit ").append(currHash).append("\n")
                     .append("Date: ").append(curr.getTimestamp()).append("\n")
@@ -61,7 +61,7 @@ public class Command {
             return;
         }
         for (String commit : allCommitHistory) {
-            Objects curr = getCommitGeneral(commit);
+            Objects curr = getHeadCommitGeneral(commit);
             StringBuilder content = new StringBuilder();
             String currHead = getCurrHead();
 
@@ -115,7 +115,7 @@ public class Command {
     }
 
     static void checkoutHeadFile(String file) {
-        Objects commit = getCurrCommit();
+        Objects commit = getCurrHeadCommit();
 
         if (!commit.index.containsKey(file)) {
             throw error("This file does not exist in current commit.");

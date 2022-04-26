@@ -91,7 +91,7 @@ public class Files {
     }
 
     /* Get current commit as an Object. */
-    static Objects getCurrCommit() {
+    static Objects getCurrHeadCommit() {
         File commit = getObjectsFile(getCurrHead());
         return readObject(commit, Objects.class);
     }
@@ -104,7 +104,7 @@ public class Files {
     }
 
     /* Get the commit as an Object for the given sha1 of the branch. */
-    static Objects getCommitGeneral(String branchHash) {
+    static Objects getHeadCommitGeneral(String branchHash) {
         File commit = getObjectsFile(getHeadGeneral(branchHash));
         return readObject(commit, Objects.class);
     }
@@ -113,11 +113,10 @@ public class Files {
     static List<String> pastCommits(String branchHash) {
         String currHead = getHeadGeneral(branchHash);
         List<String> pastCommits = new ArrayList<>();
-        String commitHash = currHead;
-        while (!commitHash.equals("")) {
-            pastCommits.add(commitHash);
-            Objects currCommit = getObjectsHash(commitHash);
-            commitHash = currCommit.getParent();
+        while (!currHead.equals("")) {
+            pastCommits.add(currHead);
+            Objects currCommit = getObjectsHash(currHead);
+            currHead = currCommit.getParent();
         }
         return pastCommits;
     }
