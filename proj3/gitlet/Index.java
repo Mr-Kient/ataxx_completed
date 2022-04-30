@@ -27,8 +27,9 @@ public class Index implements Serializable {
      * and the given Object. */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Index){
-            return (((Index) obj).filename.hashCode() == this.filename.hashCode());
+        if (obj instanceof Index) {
+            return (((Index) obj).filename.hashCode()
+                    == this.filename.hashCode());
         }
         return false;
     }
