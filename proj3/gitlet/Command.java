@@ -1,6 +1,7 @@
 package gitlet;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import static gitlet.Utils.*;
 import static gitlet.Files.*;
@@ -113,7 +114,52 @@ public class Command {
     }
 
     static void status() {
+        Objects stage = readObject(INDEX, Objects.class);
+        Objects removeStage = readObject(INDEX_REMOVE, Objects.class);
+        String currHead = readContentsAsString(CURR_HEAD);
 
+        List<String> branches = plainFilenamesIn(BRANCHES);
+        List<String> stageList = new ArrayList<>(
+                stage.index.keySet());
+        List<String> removeStageList = new ArrayList<>(
+                removeStage.index.keySet());
+        List<String> modifiedList = modifiedFiles(stage, removeStage);
+        List<String> untrackedList = untrackedFiles(stage, removeStage);
+
+        StringBuilder content = new StringBuilder();
+
+        content.append("=== Branches ===\n");
+        if (branches == null) {
+            System.out.println("No Branches exist.");
+            return;
+        }
+        for (String branch : branches) {
+            if (currHead.equals(branch)) {
+                branch = "*" + branch;
+            }
+            content.append(branch).append("\n");
+        }
+
+        content.append("\n=== Staged Files ===\n");
+        for (String stageContent : stageList) {
+            content.append(stageContent).append("\n");
+        }
+
+        content.append("\n=== Removed Files ===\n");
+        for (String removeContent : removeStageList) {
+            content.append(removeContent).append("\n");
+        }
+
+        content.append("\n=== Modifications Not Staged For Commit ===\n");
+        for (String modifiedContent : modifiedList) {
+            content.append(modifiedContent).append("\n");
+        }
+
+        content.append("\n=== Untracked Files ===\n");
+        for (String untrackedContent : untrackedList) {
+            content.append(untrackedContent).append("\n");
+        }
+        System.out.println(content);
     }
 
     static void checkoutPastFile(String sha1, String file) {

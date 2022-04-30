@@ -163,6 +163,57 @@ public class Files {
         return pastCommits;
     }
 
+    static List<String> modifiedFiles(Objects stagedContent, Objects unstagedContent) {
+        Objects currHeadCommit = getCurrHeadCommit();
+        List<String> modified = new ArrayList<>();
+
+        for (String staged : stagedContent.index.keySet()) {
+            System.out.println(staged);
+            String sha1 = stagedContent.index.get(staged).getSha1();
+            String content = readContentsAsString(Utils.join(staged));
+            if (!Utils.sha1(new Objects(content, staged)).equals(sha1)) {
+                modified.add(staged + " (modified)");
+            }
+        }
+
+        for (String currCommit : currHeadCommit.index.keySet()) {
+            String sha1 = currHeadCommit.index.get(currCommit).getSha1();
+            File commitVer = new File(currCommit);
+            String content = readContentsAsString(commitVer);
+
+            if (!stagedContent.index.containsKey(currCommit)) {
+                if (!sha1(new Objects(content, currCommit)).equals(sha1)) {
+                    modified.add(currCommit + " (modified)");
+                } else if (!commitVer.exists()) {
+                    modified.add(currCommit + " (deleted)");
+                }
+            }
+        }
+
+        for (String unstaged : unstagedContent.index.keySet()) {
+            modified.remove(unstaged + " (deleted)");
+        }
+
+        return modified;
+    }
+
+    static List<String> untrackedFiles(Objects stagedContent, Objects removedContent) {
+        Objects currHeadCommit = getCurrHeadCommit();
+        List<String> untracked = new ArrayList<>();
+
+        for (String files : java.util.Objects.requireNonNull(plainFilenamesIn(CWD))) {
+            if (!currHeadCommit.index.containsKey(files)) {
+                untracked.add(files);
+            }
+        }
+
+        untracked.removeIf(file -> stagedContent.index.containsKey(file)
+                || removedContent.index.containsKey(file));
+
+        return untracked;
+    }
+
+
     /* Necessary Files. */
 
     /** Current working directory. */
