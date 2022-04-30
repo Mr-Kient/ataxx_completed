@@ -19,48 +19,48 @@ public class Main {
         }
         String cases = args[0];
         switch (cases) {
-            case "init" -> initMain();
-            case "add" -> {
-                if (validateArg(args, 2)) {
-                    addMain(args);
-                }
+        case "init" -> initMain();
+        case "add" -> {
+            if (validateArg(args, 2)) {
+                addMain(args);
             }
-            case "commit" -> commitMain(args);
-            case "rm" -> {
-                if (validateArg(args, 2)) {
-                    rm(args[1]);
-                }
+        }
+        case "commit" -> commitMain(args);
+        case "rm" -> {
+            if (validateArg(args, 2)) {
+                rm(args[1]);
             }
-            case "log" -> log();
-            case "global-log" -> globalLog();
-            case "find" -> {
-                if (validateArg(args, 2)) {
-                    find(args[1]);
-                }
+        }
+        case "log" -> log();
+        case "global-log" -> globalLog();
+        case "find" -> {
+            if (validateArg(args, 2)) {
+                find(args[1]);
             }
-            case "status" -> status();
-            case "checkout" -> checkoutMain(args);
-            case "branch" -> {
-                if (validateArg(args, 2)) {
-                    branch(args[1]);
-                }
+        }
+        case "status" -> status();
+        case "checkout" -> checkoutMain(args);
+        case "branch" -> {
+            if (validateArg(args, 2)) {
+                branch(args[1]);
             }
-            case "rm-branch" -> {
-                if (validateArg(args, 2)) {
-                    rmBranch(args[1]);
-                }
+        }
+        case "rm-branch" -> {
+            if (validateArg(args, 2)) {
+                rmBranch(args[1]);
             }
-            case "reset" -> {
-                if (validateArg(args, 2)) {
-                    reset(args[1]);
-                }
+        }
+        case "reset" -> {
+            if (validateArg(args, 2)) {
+                reset(args[1]);
             }
-            case "merge" -> {
-                if (validateArg(args, 2)) {
-                    merge(args[1]);
-                }
+        }
+        case "merge" -> {
+            if (validateArg(args, 2)) {
+                merge(args[1]);
             }
-            default -> System.out.println("No command with that name exists.");
+        }
+        default -> System.out.println("No command with that name exists.");
         }
     }
 
