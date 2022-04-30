@@ -117,14 +117,13 @@ public class Command {
         Objects stage = readObject(INDEX, Objects.class);
         Objects removeStage = readObject(INDEX_REMOVE, Objects.class);
         String currHead = readContentsAsString(CURR_HEAD);
-
         List<String> branches = plainFilenamesIn(BRANCHES);
         List<String> stageList = new ArrayList<>(
                 stage.index.keySet());
         List<String> removeStageList = new ArrayList<>(
                 removeStage.index.keySet());
-        List<String> modifiedList = modifiedFiles(stage, removeStage);
-        List<String> untrackedList = untrackedFiles(stage, removeStage);
+        List<String> modifiedList = modifiedFiles();
+        List<String> untrackedList = untrackedFiles();
 
         StringBuilder content = new StringBuilder();
 

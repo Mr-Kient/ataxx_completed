@@ -164,9 +164,11 @@ public class Files {
         return pastCommits;
     }
 
-    static List<String> modifiedFiles(Objects stagedContent,
-                                      Objects unstagedContent) {
+    /* Get all modified files and return as a list. */
+    static List<String> modifiedFiles() {
         Objects currHeadCommit = getCurrHeadCommit();
+        Objects stagedContent = readObject(INDEX, Objects.class);
+        Objects unstagedContent = readObject(INDEX_REMOVE, Objects.class);
         List<String> modified = new ArrayList<>();
 
         for (String staged : stagedContent.index.keySet()) {
@@ -199,9 +201,11 @@ public class Files {
         return modified;
     }
 
-    static List<String> untrackedFiles(Objects stagedContent,
-                                       Objects removedContent) {
+    /* Get all untracked files and return as a list. */
+    static List<String> untrackedFiles() {
         Objects currHeadCommit = getCurrHeadCommit();
+        Objects stagedContent = readObject(INDEX, Objects.class);
+        Objects removedContent = readObject(INDEX_REMOVE, Objects.class);
         List<String> untracked = new ArrayList<>();
 
         for (String files : requireNonNull(plainFilenamesIn(CWD))) {
