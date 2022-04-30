@@ -38,9 +38,9 @@ public class Index implements Serializable {
         return sha1.equals(other.sha1);
     }
 
-    /* The file name. */
+    /** The file name. */
     private final String filename;
 
-    /* The Sha1 Hashcode. */
+    /** The Sha1 Hashcode. */
     private final String sha1;
 }
