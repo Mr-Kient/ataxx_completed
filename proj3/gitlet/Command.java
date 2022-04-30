@@ -33,6 +33,7 @@ public class Command {
         currHead.makeCommit(msg);
 
         writeObject(currHead);
+
         toStageFiles.index.clear();
         stageRemove.index.clear();
         writeObject(INDEX_REMOVE, toStageFiles);
@@ -271,7 +272,9 @@ public class Command {
         for (String files : requireNonNull(plainFilenamesIn(CWD))) {
             if (!files.equals("head")
                     && !files.equals("index")
-                    && !files.equals("index-remove")) {
+                    && !files.equals("index-remove")
+                    && !files.equals("refs")
+                    && !files.equals("objects")) {
                 restrictedDelete(files);
             }
         }

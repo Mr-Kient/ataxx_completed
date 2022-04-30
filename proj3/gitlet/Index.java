@@ -34,10 +34,6 @@ public class Index implements Serializable {
         return false;
     }
 
-    public boolean verCompare(Index other) {
-        return sha1.equals(other.sha1);
-    }
-
     /** The file name. */
     private final String filename;
 

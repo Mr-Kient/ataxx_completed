@@ -174,8 +174,8 @@ public class Files {
         for (String staged : stagedContent.index.keySet()) {
             System.out.println(staged);
             String sha1 = stagedContent.index.get(staged).getSha1();
-            String content = readContentsAsString(Utils.join(staged));
-            if (!Utils.sha1(new Objects(content, staged)).equals(sha1)) {
+            String content = readContentsAsString(join(staged));
+            if (!sha1(new Objects(content, staged)).equals(sha1)) {
                 modified.add(staged + " (modified)");
             }
         }
@@ -212,7 +212,9 @@ public class Files {
             if (!currHeadCommit.index.containsKey(files)
                     && !files.equals("head")
                     && !files.equals("index")
-                    && !files.equals("index-remove")) {
+                    && !files.equals("index-remove")
+                    && !files.equals("refs")
+                    && !files.equals("objects")) {
                 untracked.add(files);
             }
         }
