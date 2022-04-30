@@ -209,7 +209,10 @@ public class Files {
         List<String> untracked = new ArrayList<>();
 
         for (String files : requireNonNull(plainFilenamesIn(CWD))) {
-            if (!currHeadCommit.index.containsKey(files)) {
+            if (!currHeadCommit.index.containsKey(files)
+                    && !files.equals("head")
+                    && !files.equals("index")
+                    && !files.equals("index-remove")) {
                 untracked.add(files);
             }
         }
