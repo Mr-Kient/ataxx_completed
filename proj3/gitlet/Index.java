@@ -23,19 +23,6 @@ public class Index implements Serializable {
         return filename.hashCode();
     }
 
-
-    /* To detect if the Sha1 hashcodes are the same for this instance
-     * and the given Object. */
-    @Override
-    public boolean equals(Object obj) {
-        //this one is so hard i do not think we learned how to use instanceof.
-        //so i have to learn it from others.
-        if (obj instanceof Index){
-            return (((Index) obj).filename.hashCode() == this.filename.hashCode());
-        }
-        return false;
-    }
-
     public boolean verCompare(Index other) {
         return sha1.equals(other.sha1);
     }

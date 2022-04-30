@@ -16,9 +16,7 @@ public class Objects implements Serializable {
     Objects() {
         type = "commit";
         Date date = new Date(0);
-        //Because my computer system is Chinese.
-        //Also, I did not get how to use the Format function,
-        //thus I self learned SimpleDateFormat online.
+
         timestamp = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy Z",
                 new Locale("en")).format(date);
         msg = "initial commit";
@@ -34,9 +32,9 @@ public class Objects implements Serializable {
     }
 
     /* Create a blob. */
-    Objects(String content, String file) {
+    Objects(String providedContent, String file) {
         type = "blob";
-        this.content = content;
+        content = providedContent;
         fileName = file;
     }
 
@@ -53,16 +51,16 @@ public class Objects implements Serializable {
         }
     }
 
-    public void makeCommit(String msg) {
+    public void makeCommit(String message) {
         type = "commit";
         Date date = new Date();
-        //Same cause.
+
         timestamp = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy Z",
                 new Locale("en")).format(date);
         parent = new LinkedList<>();
         parent.add(getCurrHead());
-        //same variable name problem...
-        this.msg = msg;
+
+        msg = message;
     }
 
     String getType() {

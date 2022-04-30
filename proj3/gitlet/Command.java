@@ -37,8 +37,10 @@ public class Command {
     }
 
     static void rm(String file) {
-        File removeFile = new File(file);
-        Objects removeBlob = new Objects(readContentsAsString(removeFile), file);
+        String removeFile
+                = readContentsAsString(new File(file));
+        Objects removeBlob
+                = new Objects(removeFile, file);
         updateRemoveStage(removeBlob);
     }
 
@@ -58,7 +60,8 @@ public class Command {
     }
 
     static void globalLog() {
-        List<String> allCommitHistory = plainFilenamesIn(BRANCHES);
+        List<String> allCommitHistory
+                = plainFilenamesIn(BRANCHES);
         if (allCommitHistory == null) {
             return;
         }
@@ -67,7 +70,9 @@ public class Command {
             List<String> pastCommits = pastCommits(commit);
 
             for (String currHead : pastCommits) {
-                Objects curr = readObject(getObjectsFile(currHead), Objects.class);
+                File currHeadFile = getObjectsFile(currHead);
+                Objects curr
+                        = readObject(currHeadFile, Objects.class);
                 content.append("=== \n")
                         .append("commit ").append(currHead).append("\n")
                         .append("Date: ").append(curr.getTimestamp()).append("\n")
@@ -79,16 +84,20 @@ public class Command {
     }
 
     static void find(String commitmsg) {
-        List<String> allCommitHistory = plainFilenamesIn(BRANCHES);
+        List<String> allCommitHistory
+                = plainFilenamesIn(BRANCHES);
         if (allCommitHistory == null) {
-            System.out.println("Found no commit with that message.");
+            System.out.println("Found no commit"
+                    + " with that message.");
             return;
         }
         boolean commitFound = false;
         for (String commit : allCommitHistory) {
             List<String> pastCommits = pastCommits(commit);
             for (String currHead : pastCommits) {
-                Objects curr = readObject(getObjectsFile(currHead), Objects.class);
+                File currHeadFile = getObjectsFile(currHead);
+                Objects curr
+                        = readObject(currHeadFile, Objects.class);
                 String msg = curr.getMsg();
                 if (msg.equals(commitmsg)) {
                     commitFound = true;
@@ -97,7 +106,8 @@ public class Command {
             }
         }
         if (!commitFound) {
-            System.out.println("Found no commit with that message.");
+            System.out.println("Found no commit"
+                    + " with that message.");
         }
     }
 
