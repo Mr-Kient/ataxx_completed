@@ -23,20 +23,20 @@ public class Files {
 
     /* Write Objects in the OBJECTS directory.
      * Save by the first 2 letters of sha1 (same as Git). */
-    static void writeObject(Objects Object) {
-        String sha1 = sha1(serialize(Object));
+    static void writeObject(Objects object) {
+        String sha1 = sha1(serialize(object));
         join(OBJECTS, getHeadHash(sha1)).mkdir();
         File file = getObjectsFile(sha1);
 
-        if (Object.getType().equals("commit")) {
+        if (object.getType().equals("commit")) {
             String currBranch
                     = Utils.readContentsAsString(CURR_HEAD);
             writeHead(currBranch);
             updateBranchHead(currBranch, sha1);
-            Utils.writeObject(file, Object);
+            Utils.writeObject(file, object);
         } else {
-            if (writeStagedToIndex(sha1, Object.getFileName())) {
-                Utils.writeObject(file, Object);
+            if (writeStagedToIndex(sha1, object.getFileName())) {
+                Utils.writeObject(file, object);
             }
         }
     }

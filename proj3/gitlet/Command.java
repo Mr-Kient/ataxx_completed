@@ -1,7 +1,7 @@
 package gitlet;
 
 import java.io.File;
-import java.util.*;
+import java.util.List;
 import static gitlet.Utils.*;
 import static gitlet.Files.*;
 
@@ -75,7 +75,8 @@ public class Command {
                         = readObject(currHeadFile, Objects.class);
                 content.append("=== \n")
                         .append("commit ").append(currHead).append("\n")
-                        .append("Date: ").append(curr.getTimestamp()).append("\n")
+                        .append("Date: ").append(curr.getTimestamp())
+                        .append("\n")
                         .append(curr.getMsg()).append("\n\n");
             }
 

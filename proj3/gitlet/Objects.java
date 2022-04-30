@@ -96,9 +96,5 @@ public class Objects implements Serializable {
     private String msg;
     private String fileName;
     private LinkedList<String> parent;
-
-    /*  */
-    //It turns out it have to be public because we need to read and insert
-    //elements in other classes.
     public HashMap<String, Index> index;
 }
