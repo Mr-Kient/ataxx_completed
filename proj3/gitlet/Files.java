@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import static gitlet.Utils.*;
+import static java.util.Objects.requireNonNull;
 
 /* Files class. For all commands and files that utilized for the
  * file control of the system. */
@@ -163,7 +164,8 @@ public class Files {
         return pastCommits;
     }
 
-    static List<String> modifiedFiles(Objects stagedContent, Objects unstagedContent) {
+    static List<String> modifiedFiles(Objects stagedContent,
+                                      Objects unstagedContent) {
         Objects currHeadCommit = getCurrHeadCommit();
         List<String> modified = new ArrayList<>();
 
@@ -197,11 +199,12 @@ public class Files {
         return modified;
     }
 
-    static List<String> untrackedFiles(Objects stagedContent, Objects removedContent) {
+    static List<String> untrackedFiles(Objects stagedContent,
+                                       Objects removedContent) {
         Objects currHeadCommit = getCurrHeadCommit();
         List<String> untracked = new ArrayList<>();
 
-        for (String files : java.util.Objects.requireNonNull(plainFilenamesIn(CWD))) {
+        for (String files : requireNonNull(plainFilenamesIn(CWD))) {
             if (!currHeadCommit.index.containsKey(files)) {
                 untracked.add(files);
             }
