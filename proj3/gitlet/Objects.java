@@ -31,13 +31,6 @@ public class Objects implements Serializable {
         }
     }
 
-    /* Create a blob. */
-    Objects(String providedContent, String file) {
-        type = "blob";
-        content = providedContent;
-        fileName = file;
-    }
-
     public void updateIndex(Objects stagedFiles, Objects stageRemove) {
         if (!stagedFiles.index.isEmpty()) {
             for (String file : stagedFiles.index.keySet()) {
@@ -49,6 +42,13 @@ public class Objects implements Serializable {
                 index.remove(file);
             }
         }
+    }
+
+    /* Create a blob. */
+    Objects(String providedContent, String file) {
+        type = "blob";
+        content = providedContent;
+        fileName = file;
     }
 
     public void makeCommit(String message) {

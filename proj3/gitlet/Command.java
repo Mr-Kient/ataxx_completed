@@ -131,15 +131,13 @@ public class Command {
         StringBuilder content = new StringBuilder();
 
         content.append("=== Branches ===\n");
-        if (branches == null) {
-            System.out.println("No Branches exist.");
-            return;
-        }
-        for (String branch : branches) {
-            if (currHead.equals(branch)) {
-                branch = "*" + branch;
+        if (branches != null) {
+            for (String branch : branches) {
+                if (currHead.equals(branch)) {
+                    content.append("*");
+                }
+                content.append(branch).append("\n");
             }
-            content.append(branch).append("\n");
         }
 
         content.append("\n=== Staged Files ===\n");
@@ -202,7 +200,43 @@ public class Command {
     }
 
     static void checkoutBranch(String branch) {
+        String currHead = readContentsAsString(CURR_HEAD);
+        List<String> branches = plainFilenamesIn(BRANCHES);
+        List<String> untrackedList = untrackedFiles();
+        Objects stagedContent = readObject(INDEX, Objects.class);
+        Objects unstagedContent = readObject(INDEX_REMOVE,
+                Objects.class);
 
+        if (!untrackedList.isEmpty()) {
+            System.out.println("There is an untracked file in the way;"
+                    + " delete it, or add and commit it first.");
+            return;
+        }
+        if (currHead.equals(branch)) {
+            System.out.println("No need to checkout the current branch.");
+            return;
+        }
+        if (branches == null || !branches.contains(branch)) {
+            System.out.println("No such branch exists.");
+            return;
+        }
+
+        writeHead(branch);
+        Objects commit = readObject(getObjectsFile(getHeadGeneral(branch)),
+                Objects.class);
+        for (Map.Entry<String, Index> allEntry : commit.index.entrySet()) {
+            File entry = join(allEntry.getKey());
+            updateRepoFile(entry, allEntry.getValue().getSha1());
+        }
+
+        for (String i : untrackedList) {
+            restrictedDelete(i);
+        }
+
+        stagedContent.index.clear();
+        unstagedContent.index.clear();
+        writeObject(INDEX, stagedContent);
+        writeObject(INDEX_REMOVE, unstagedContent);
     }
 
     static void branch(String newBranch) {
