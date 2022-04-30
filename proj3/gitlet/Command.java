@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import static gitlet.Utils.*;
 import static gitlet.Files.*;
 import static java.util.Objects.requireNonNull;

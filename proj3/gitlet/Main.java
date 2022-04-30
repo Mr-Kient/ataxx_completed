@@ -14,49 +14,53 @@ public class Main {
      *  <COMMAND> <OPERAND> .... */
     public static void main(String... args) {
         if (args.length == 0) {
-            throw error("No command detected.");
+            System.out.println("Please enter a command.");
+            return;
         }
         String cases = args[0];
-        if (cases.equals("init")) {
-            validateArg(args, 1);
-            initMain();
-        } else if (cases.equals("add")) {
-            validateArg(args, 2);
-            addMain(args);
-        } else if (cases.equals("commit")) {
-            commitMain(args);
-        } else if (cases.equals("rm")) {
-            validateArg(args, 2);
-            rm(args[1]);
-        } else if (cases.equals("log")) {
-            validateArg(args, 1);
-            log();
-        } else if (cases.equals("global-log")) {
-            validateArg(args, 1);
-            globalLog();
-        } else if (cases.equals("find")) {
-            validateArg(args, 2);
-            find(args[1]);
-        } else if (cases.equals("status")) {
-            validateArg(args, 1);
-            status();
-        } else if (cases.equals("checkout")) {
-            checkoutMain(args);
-        } else if (cases.equals("branch")) {
-            validateArg(args, 2);
-            branch(args[1]);
-        } else if (cases.equals("rm-branch")) {
-            validateArg(args, 2);
-            rmBranch(args[1]);
-        } else if (cases.equals("reset")) {
-            validateArg(args, 2);
-            reset(args[1]);
-        } else if (cases.equals("merge")) {
-            validateArg(args, 2);
-            merge(args[1]);
-        } else {
-            System.out.println("Invalid command.");
-            return;
+        switch (cases) {
+            case "init" -> initMain();
+            case "add" -> {
+                if (validateArg(args, 2)) {
+                    addMain(args);
+                }
+            }
+            case "commit" -> commitMain(args);
+            case "rm" -> {
+                if (validateArg(args, 2)) {
+                    rm(args[1]);
+                }
+            }
+            case "log" -> log();
+            case "global-log" -> globalLog();
+            case "find" -> {
+                if (validateArg(args, 2)) {
+                    find(args[1]);
+                }
+            }
+            case "status" -> status();
+            case "checkout" -> checkoutMain(args);
+            case "branch" -> {
+                if (validateArg(args, 2)) {
+                    branch(args[1]);
+                }
+            }
+            case "rm-branch" -> {
+                if (validateArg(args, 2)) {
+                    rmBranch(args[1]);
+                }
+            }
+            case "reset" -> {
+                if (validateArg(args, 2)) {
+                    reset(args[1]);
+                }
+            }
+            case "merge" -> {
+                if (validateArg(args, 2)) {
+                    merge(args[1]);
+                }
+            }
+            default -> System.out.println("No command with that name exists.");
         }
     }
 
@@ -94,14 +98,15 @@ public class Main {
             checkoutBranch(args[1]);
         } else {
             System.out.println("Not a valid input for checkout.");
-            return;
         }
     }
 
-    public static void validateArg(String[] args, int req) {
+    public static boolean validateArg(String[] args, int req) {
         if (args.length != req) {
-            throw error("Invalid number of arguments.");
+            System.out.println("Incorrect operands.");
+            return false;
         }
+        return true;
     }
 
 }
