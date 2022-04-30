@@ -9,7 +9,7 @@ import static gitlet.Utils.*;
  * file control of the system. */
 public class Files {
 
-    /** Initialize working directory. */
+    /* Initialize working directory. */
     static void initDir() {
         CWD.mkdirs();
         OBJECTS.mkdirs();
@@ -21,7 +21,7 @@ public class Files {
         writeContents(CURR_HEAD, "master");
     }
 
-    /** Write Objects in the OBJECTS directory.
+    /* Write Objects in the OBJECTS directory.
      * Save by the first 2 letters of sha1 (same as Git). */
     static void writeObject(Objects object) {
         String sha1 = sha1(serialize(object));
@@ -41,7 +41,7 @@ public class Files {
         }
     }
 
-    /** Write the files that wait for staging into the INDEX file. */
+    /* Write the files that wait for staging into the INDEX file. */
     static boolean writeStagedToIndex(String sha1, String filename) {
         Objects fileList;
         fileList = readObject(INDEX, Objects.class);
@@ -58,17 +58,17 @@ public class Files {
         return true;
     }
 
-    /** Write / update the current HEAD. */
+    /* Write / update the current HEAD. */
     static void writeHead(String sha1) {
         writeContents(CURR_HEAD, sha1);
     }
 
-    /** Update the sha1 code of the Head of the very branch. */
+    /* Update the sha1 code of the Head of the very branch. */
     static void updateBranchHead(String branch, String sha1) {
         writeContents(join(BRANCHES, branch), sha1);
     }
 
-    /** Put the content of given blob into a new one.
+    /* Put the content of given blob into a new one.
      * For checkout use. */
     static void updateRepoFile(File newBlobLoc, String blobHash) {
         File repo = getObjectsFile(blobHash);
@@ -76,7 +76,7 @@ public class Files {
         Utils.writeContents(newBlobLoc, content);
     }
 
-    /** For updating the stage of removal, INDEX_REMOVE.
+    /* For updating the stage of removal, INDEX_REMOVE.
      * Utilized for command rm. */
     static void updateRemoveStage(Objects removeBlob) {
         File currHead = getObjectsFile(getCurrHead());
@@ -108,50 +108,50 @@ public class Files {
      * CWD -> OBJECTS -> 0b -> 2a40250fe9328e751984616...
      */
 
-    /** Get the head of the sha1 code from the provided sha1.
+    /* Get the head of the sha1 code from the provided sha1.
      * Use for saving files by Head order in the OBJECTS directory. */
     static String getHeadHash(String sha1) {
         return sha1.substring(0, 2);
     }
 
-    /** Get the body of the sha1 code from the provided sha1.
+    /* Get the body of the sha1 code from the provided sha1.
      * Use for saving files by Body order in its HEAD directory. */
     static String getBodyHash(String sha1) {
         return sha1.substring(2);
     }
 
-    /** Get the file directory from the provided sha1. */
+    /* Get the file directory from the provided sha1. */
     static File getObjectsFile(String sha1) {
         return join(OBJECTS, getHeadHash(sha1), getBodyHash(sha1));
     }
 
-    /** Get the Object of the given sha1 hash. */
+    /* Get the Object of the given sha1 hash. */
     static Objects getObjectsHash(String hash) {
         File obj = getObjectsFile(hash);
         return readObject(obj, Objects.class);
     }
 
 
-    /** Get current Head as a string of its sha1. */
+    /* Get current Head as a string of its sha1. */
     static String getCurrHead() {
         String curr = readContentsAsString(CURR_HEAD);
         return getHeadGeneral(curr);
     }
 
-    /** Get current commit as an Object. */
+    /* Get current commit as an Object. */
     static Objects getCurrHeadCommit() {
         File commit = getObjectsFile(getCurrHead());
         return readObject(commit, Objects.class);
     }
 
-    /** Get the Head as a string of its sha1 for the given
+    /* Get the Head as a string of its sha1 for the given
      * name of the branch. */
     static String getHeadGeneral(String branchName) {
         File branchHead = join(BRANCHES, branchName);
         return readContentsAsString(branchHead);
     }
 
-    /** Get history of commits under current Branch. Saved as a List. */
+    /* Get history of commits under current Branch. Saved as a List. */
     static List<String> pastCommits(String headHash) {
         String currHash = readContentsAsString(join(BRANCHES, headHash));
         List<String> pastCommits = new ArrayList<>();
