@@ -3,8 +3,11 @@ package gitlet;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import static gitlet.Utils.*;
 import static gitlet.Files.*;
+import static java.util.Objects.requireNonNull;
 
 public class Command {
     static void init() {
@@ -204,8 +207,7 @@ public class Command {
 
     static void branch(String newBranch) {
         File newBranchFile = join(BRANCHES, newBranch);
-        newBranchFile.mkdirs();
-        updateBranchHead(newBranch, getCurrHead());
+        writeContents(newBranchFile, getCurrHead());
     }
 
     static void rmBranch(String branch) {
@@ -213,7 +215,38 @@ public class Command {
     }
 
     static void reset(String sha1) {
+        Objects stagedContent = readObject(INDEX, Objects.class);
+        Objects unstagedContent = readObject(INDEX_REMOVE,
+                Objects.class);
+        String currBranch
+                = Utils.readContentsAsString(CURR_HEAD);
+        File commitFile = getObjectsFile(sha1);
+        Objects commit = getObjectsHash(sha1);
 
+        if (!untrackedFiles().isEmpty()) {
+            System.out.println("There is an untracked file in the way;"
+                    + " delete it, or add and commit it first.");
+            return;
+        }
+        if (!commitFile.exists()) {
+            System.out.println("No commit with that id exists.");
+            return;
+        }
+
+        updateBranchHead(currBranch, sha1);
+
+        for (String files : requireNonNull(plainFilenamesIn(CWD))) {
+            restrictedDelete(files);
+        }
+        for (Map.Entry<String, Index> allEntry : commit.index.entrySet()) {
+            File entry = join(allEntry.getKey());
+            updateRepoFile(entry, allEntry.getValue().getSha1());
+        }
+
+        stagedContent.index.clear();
+        unstagedContent.index.clear();
+        writeObject(INDEX, stagedContent);
+        writeObject(INDEX_REMOVE, unstagedContent);
     }
 
     static void merge(String branch) {
