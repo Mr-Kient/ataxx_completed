@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import static gitlet.Utils.*;
 
+/* Files class. For all commands and files that utilized for the
+ * file control of the system. */
 public class Files {
 
     /* Initialize working directory. */
@@ -39,6 +41,7 @@ public class Files {
         }
     }
 
+    /* Write the files that wait for staging into the INDEX file. */
     static boolean writeStagedToIndex(String sha1, String filename) {
         Objects fileList;
         fileList = readObject(INDEX, Objects.class);
@@ -73,6 +76,29 @@ public class Files {
         Utils.writeContents(newBlobLoc, content);
     }
 
+    /* For updating the stage of removal, INDEX_REMOVE.
+     * Utilized for command rm. */
+    static void updateRemoveStage(Objects removeBlob) {
+        File currHead = getObjectsFile(getCurrHead());
+        Objects currHeadBlob = readObject(currHead, Objects.class);
+        Objects stage = readObject(INDEX, Objects.class);
+        String removeSha1 = sha1(removeBlob);
+        if (currHeadBlob.index.containsKey(removeBlob.getFileName())) {
+            Objects removeStage = readObject(INDEX_REMOVE, Objects.class);
+            if (removeStage == null) {
+                removeStage = new Objects("stage");
+            }
+            Index entry = new Index(removeSha1, removeBlob.getFileName());
+            removeStage.index.put(removeBlob.getFileName(), entry);
+            Utils.writeObject(INDEX_REMOVE, removeStage);
+            restrictedDelete(new File(removeBlob.getFileName()));
+        } else if (stage.index.containsKey(removeBlob.getFileName())) {
+            stage.index.remove(removeBlob.getFileName());
+            Utils.writeObject(INDEX, stage);
+        } else {
+            System.out.println("No reason to remove the file.");
+        }
+    }
 
     /* The strategy to save files in this system is to use its sha1 code like Git does.
      * E.g., we have a new file whose sha1 code is 0b2a40250fe9328e751984616...
@@ -104,7 +130,7 @@ public class Files {
     }
 
 
-    /* Get current Head as a string containing its sha1. */
+    /* Get current Head as a string of its sha1. */
     static String getCurrHead() {
         String curr = readContentsAsString(CURR_HEAD);
         return getHeadGeneral(curr);
@@ -116,10 +142,10 @@ public class Files {
         return readObject(commit, Objects.class);
     }
 
-    /* Get the Head as a string containing its sha1 for the given
-     * sha1 of the branch. */
-    static String getHeadGeneral(String branchHash) {
-        File branchHead = join(BRANCHES, branchHash);
+    /* Get the Head as a string of its sha1 for the given
+     * name of the branch. */
+    static String getHeadGeneral(String branchName) {
+        File branchHead = join(BRANCHES, branchName);
         return readContentsAsString(branchHead);
     }
 

@@ -22,7 +22,7 @@ public class Command {
         Objects toStageFiles = readObject(INDEX, Objects.class);
         Objects stageRemove = readObject(INDEX_REMOVE, Objects.class);
         if (toStageFiles.index.isEmpty() && stageRemove.index.isEmpty()) {
-            throw error("Nothing need to be committed.");
+            System.out.println("No changes added to the commit.");
         }
 
         Objects currHead = getCurrHeadCommit();
@@ -37,7 +37,9 @@ public class Command {
     }
 
     static void rm(String file) {
-
+        File removeFile = new File(file);
+        Objects removeBlob = new Objects(readContentsAsString(removeFile), file);
+        updateRemoveStage(removeBlob);
     }
 
     static void log() {
@@ -77,7 +79,26 @@ public class Command {
     }
 
     static void find(String commitmsg) {
-
+        List<String> allCommitHistory = plainFilenamesIn(BRANCHES);
+        if (allCommitHistory == null) {
+            System.out.println("Found no commit with that message.");
+            return;
+        }
+        boolean commitFound = false;
+        for (String commit : allCommitHistory) {
+            List<String> pastCommits = pastCommits(commit);
+            for (String currHead : pastCommits) {
+                Objects curr = readObject(getObjectsFile(currHead), Objects.class);
+                String msg = curr.getMsg();
+                if (msg.equals(commitmsg)) {
+                    commitFound = true;
+                    System.out.println(currHead + "\n");
+                }
+            }
+        }
+        if (!commitFound) {
+            System.out.println("Found no commit with that message.");
+        }
     }
 
     static void status() {
@@ -93,13 +114,15 @@ public class Command {
             pastFile = getObjectsFile(sha1);
         }
         if (pastFile == null) {
-            throw error("No such commit exists.");
+            System.out.println("No commit with that id exists.");
+            return;
         }
 
         Objects commit = readObject(pastFile, Objects.class);
 
         if (!commit.index.containsKey(file)) {
-            throw error("This file does not exist in that commit");
+            System.out.println("File does not exist in that commit.");
+            return;
         }
 
         Index ver = commit.index.get(file);
@@ -111,7 +134,7 @@ public class Command {
         Objects commit = getCurrHeadCommit();
 
         if (!commit.index.containsKey(file)) {
-            throw error("This file does not exist in current commit.");
+            throw error("File does not exist in that commit.");
         }
 
         String hash = commit.index.get(file).getSha1();
@@ -123,8 +146,10 @@ public class Command {
 
     }
 
-    static void branch(String branch) {
-
+    static void branch(String newBranch) {
+        File newBranchFile = join(BRANCHES, newBranch);
+        newBranchFile.mkdirs();
+        updateBranchHead(newBranch, getCurrHead());
     }
 
     static void rmBranch(String branch) {

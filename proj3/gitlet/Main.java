@@ -21,18 +21,22 @@ public class Main {
         if (cases.equals("init")) {
             validateArg(args, 1);
             if (CWD.exists()) {
-                throw error("Gitlet CWD already exists.");
+                System.out.println("A Gitlet version-control system" +
+                        " already exists in the current directory.");
+                return;
             }
             init();
         } else if (cases.equals("add")) {
             validateArg(args, 2);
             if (!join(args[1]).exists()) {
-                throw error("File does not exist.");
+                System.out.println("File does not exist.");
+                return;
             }
             add(args[1]);
         } else if (cases.equals("commit")) {
             if (args.length != 2) {
-                throw error("Please enter a commit message.");
+                System.out.println("Please enter a commit message.");
+                return;
             }
             commit(args[1]);
         } else if (cases.equals("rm")) {
