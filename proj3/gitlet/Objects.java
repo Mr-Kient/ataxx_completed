@@ -110,5 +110,5 @@ public class Objects implements Serializable {
     private LinkedList<String> parent;
 
     /** Index of the Objects. For files waiting for staging. */
-    public HashMap<String, Index> index;
+    protected HashMap<String, Index> index;
 }
