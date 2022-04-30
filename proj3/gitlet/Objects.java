@@ -90,11 +90,25 @@ public class Objects implements Serializable {
         return parent.getFirst();
     }
 
+    /* Type of the Objects, can be Commit, Blob, or Stage. */
     private String type;
+
+    /* Timestamp of the Objects. */
     private String timestamp;
+
+    /* Content of the Objects. For Blobs. */
     private String content;
+
+    /* Message of the Objects. For Commits. */
     private String msg;
+
+    /* File name of the Objects. For Blobs. */
     private String fileName;
+
+    /* Parent LinkedList of the Objects.
+     * To get all past commits of its branch. */
     private LinkedList<String> parent;
+
+    /* Index of the Objects. For files waiting for staging. */
     public HashMap<String, Index> index;
 }
