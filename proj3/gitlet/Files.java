@@ -212,7 +212,7 @@ public class Files {
             if (!currHeadCommit.index.containsKey(files)
                     && !files.equals(".gitignore")
                     && !files.equals("Makefile")
-                    && !files.equals(".proj3.iml")) {
+                    && !files.equals("proj3.iml")) {
                 untracked.add(files);
             }
         }

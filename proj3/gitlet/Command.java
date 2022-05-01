@@ -272,7 +272,7 @@ public class Command {
         for (String files : requireNonNull(plainFilenamesIn(CWD))) {
             if (!files.equals(".gitignore")
                     && !files.equals("Makefile")
-                    && !files.equals(".proj3.iml")) {
+                    && !files.equals("proj3.iml")) {
                 restrictedDelete(files);
             }
         }
