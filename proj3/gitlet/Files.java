@@ -227,20 +227,20 @@ public class Files {
     static final File CWD = join(".");
 
     /** All objects needed, including commits, blobs, and trees. */
-    static final File OBJECTS = join(CWD, ".gitlet", "objects");
+    static final File OBJECTS = join(".gitlet", "objects");
 
     /** Current Head pointer. */
-    static final File CURR_HEAD = join(CWD, ".gitlet", "head");
+    static final File CURR_HEAD = join(".gitlet", "head");
 
     /** Recording all branches, remotes, and tags. */
-    static final File REFS = join(CWD, ".gitlet", "refs");
+    static final File REFS = join(".gitlet", "refs");
 
     /** Recording Hashmap of filename and index (sha1) of all files. */
-    static final File INDEX = join(CWD, ".gitlet", "index");
+    static final File INDEX = join(".gitlet", "index");
 
     /** Recording Hashmap of filename and index (sha1) of all files
      * to be removed. */
-    static final File INDEX_REMOVE = join(CWD, ".gitlet", "index-remove");
+    static final File INDEX_REMOVE = join(".gitlet", "index-remove");
 
     /** Recording all branches. */
     static final File BRANCHES = join(REFS, "heads");
