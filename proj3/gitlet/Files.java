@@ -175,7 +175,7 @@ public class Files {
             System.out.println(staged);
             String sha1 = stagedContent.index.get(staged).getSha1();
             String content = readContentsAsString(join(staged));
-            if (!sha1(new Objects(content, staged)).equals(sha1)) {
+            if (!sha1(serialize(new Objects(content, staged))).equals(sha1)) {
                 modified.add(staged + " (modified)");
             }
         }

@@ -36,8 +36,8 @@ public class Command {
 
         toStageFiles.index.clear();
         stageRemove.index.clear();
-        writeObject(INDEX_REMOVE, toStageFiles);
-        writeObject(INDEX, toStageFiles);
+        Utils.writeObject(INDEX_REMOVE, toStageFiles);
+        Utils.writeObject(INDEX, toStageFiles);
     }
 
     static void rm(String file) {
