@@ -1,7 +1,5 @@
 package gitlet;
 
-import static gitlet.Command.init;
-import static gitlet.Files.*;
 import static gitlet.Utils.*;
 import static gitlet.Command.*;
 
