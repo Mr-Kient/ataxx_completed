@@ -41,8 +41,11 @@ public class Command {
     }
 
     static void rm(String file) {
+        if (!join(file).exists()) {
+            return;
+        }
         String removeFile
-                = readContentsAsString(new File(file));
+                = readContentsAsString(join(file));
         Objects removeBlob
                 = new Objects(removeFile, file);
         updateRemoveStage(removeBlob);
@@ -191,7 +194,8 @@ public class Command {
         Objects commit = getCurrHeadCommit();
 
         if (!commit.index.containsKey(file)) {
-            throw error("File does not exist in that commit.");
+            System.out.println("File does not exist in that commit.");
+            return;
         }
 
         String hash = commit.index.get(file).getSha1();
