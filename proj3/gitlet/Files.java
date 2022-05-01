@@ -192,7 +192,8 @@ public class Files {
             }
 
             String content = readContentsAsString(commitedFiles);
-            if (!sha1(serialize(new Objects(content, currCommit))).equals(sha1)) {
+            if (!sha1(serialize(new Objects(content, currCommit)))
+                    .equals(sha1)) {
                 modified.add(currCommit + " (modified)");
             }
         }
