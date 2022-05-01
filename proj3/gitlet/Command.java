@@ -106,7 +106,7 @@ public class Command {
                 String msg = curr.getMsg();
                 if (msg.equals(commitmsg)) {
                     commitFound = true;
-                    System.out.println(currHead + "\n");
+                    System.out.println(currHead);
                 }
             }
         }

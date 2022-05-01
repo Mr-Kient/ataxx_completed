@@ -83,7 +83,7 @@ public class Files {
         File currHead = getObjectsFile(getCurrHead());
         Objects currHeadBlob = readObject(currHead, Objects.class);
         Objects stage = readObject(INDEX, Objects.class);
-        String removeSha1 = sha1(removeBlob);
+        String removeSha1 = sha1(serialize(removeBlob));
         if (currHeadBlob.index.containsKey(removeBlob.getFileName())) {
             Objects removeStage = readObject(INDEX_REMOVE, Objects.class);
             if (removeStage == null) {
