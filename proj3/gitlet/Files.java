@@ -172,7 +172,6 @@ public class Files {
         List<String> modified = new ArrayList<>();
 
         for (String staged : stagedContent.index.keySet()) {
-            System.out.println(staged);
             String sha1 = stagedContent.index.get(staged).getSha1();
             String content = readContentsAsString(join(staged));
             if (!sha1(serialize(new Objects(content, staged))).equals(sha1)) {
@@ -181,17 +180,18 @@ public class Files {
         }
 
         for (String currCommit : currHeadCommit.index.keySet()) {
-            String sha1 = currHeadCommit.index.get(currCommit).getSha1();
-            File commitVer = new File(currCommit);
-            String content = readContentsAsString(commitVer);
-
-            if (!stagedContent.index.containsKey(currCommit)) {
-                if (!sha1(new Objects(content, currCommit)).equals(sha1)) {
-                    modified.add(currCommit + " (modified)");
-                } else if (!commitVer.exists()) {
-                    modified.add(currCommit + " (deleted)");
-                }
+            if (stagedContent.index.containsKey(currCommit)) {
+                continue;
             }
+            String sha1 = currHeadCommit.index.get(currCommit).getSha1();
+            File CWDFiles = join(currCommit);
+            if (!CWDFiles.exists()) {
+                modified.add(currCommit + " (deleted)");
+                continue;
+            }
+            String content = readContentsAsString(CWDFiles);
+            if (!sha1(serialize(new Objects(content, currCommit))).equals(sha1))
+                modified.add(currCommit + " (modified)");
         }
 
         for (String unstaged : unstagedContent.index.keySet()) {

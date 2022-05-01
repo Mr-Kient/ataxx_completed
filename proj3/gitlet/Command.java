@@ -128,7 +128,7 @@ public class Command {
         List<String> modifiedList = modifiedFiles();
         List<String> untrackedList = untrackedFiles();
 
-        StringBuilder content = new StringBuilder();
+        StringBuilder content = new StringBuilder("");
 
         content.append("=== Branches ===\n");
         if (branches != null) {
