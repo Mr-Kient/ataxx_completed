@@ -65,7 +65,7 @@ public class Main {
     }
 
     static void initMain() {
-        if (CWD.exists()) {
+        if (join(".gitlet").exists()) {
             System.out.println("A Gitlet version-control system"
                     + " already exists in the current directory.");
             return;
