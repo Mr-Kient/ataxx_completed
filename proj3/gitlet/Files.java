@@ -209,12 +209,7 @@ public class Files {
         List<String> untracked = new ArrayList<>();
 
         for (String files : requireNonNull(plainFilenamesIn(CWD))) {
-            if (!currHeadCommit.index.containsKey(files)
-                    && !files.equals("head")
-                    && !files.equals("index")
-                    && !files.equals("index-remove")
-                    && !files.equals("refs")
-                    && !files.equals("objects")) {
+            if (!currHeadCommit.index.containsKey(files)) {
                 untracked.add(files);
             }
         }
@@ -229,23 +224,23 @@ public class Files {
     /* Necessary Files. */
 
     /** Current working directory. */
-    static final File CWD = new File(".gitlet");
+    static final File CWD = new File(".");
 
     /** All objects needed, including commits, blobs, and trees. */
-    static final File OBJECTS = join(CWD, "objects");
+    static final File OBJECTS = join(".gitlet", "objects");
 
     /** Current Head pointer. */
-    static final File CURR_HEAD = join(CWD, "head");
+    static final File CURR_HEAD = join(".gitlet", "head");
 
     /** Recording all branches, remotes, and tags. */
-    static final File REFS = join(CWD, "refs");
+    static final File REFS = join(".gitlet", "refs");
 
     /** Recording Hashmap of filename and index (sha1) of all files. */
-    static final File INDEX = join(CWD, "index");
+    static final File INDEX = join(".gitlet", "index");
 
     /** Recording Hashmap of filename and index (sha1) of all files
      * to be removed. */
-    static final File INDEX_REMOVE = join(CWD, "index-remove");
+    static final File INDEX_REMOVE = join(".gitlet", "index-remove");
 
     /** Recording all branches. */
     static final File BRANCHES = join(REFS, "heads");

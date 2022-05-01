@@ -270,13 +270,7 @@ public class Command {
         updateBranchHead(currBranch, sha1);
 
         for (String files : requireNonNull(plainFilenamesIn(CWD))) {
-            if (!files.equals("head")
-                    && !files.equals("index")
-                    && !files.equals("index-remove")
-                    && !files.equals("refs")
-                    && !files.equals("objects")) {
-                restrictedDelete(files);
-            }
+            restrictedDelete(files);
         }
         for (Map.Entry<String, Index> allEntry : commit.index.entrySet()) {
             File entry = join(allEntry.getKey());
