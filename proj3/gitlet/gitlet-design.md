@@ -215,5 +215,5 @@ for further usage.
 
 ## 4. Design Diagram
 
-![](C:\Users\Darren\Documents\Documents\Berkeley\Year_1_Sem_2\CS61B\repo\proj3\gitlet-design.png)
+![](C:\Users\Darren\Documents\Documents\Berkeley\Year_1_Sem_2\CS61B\repo\proj3\gitlet\gitlet-design.png)
 
