@@ -224,7 +224,7 @@ public class Files {
     /* Necessary Files. */
 
     /** Current working directory. */
-    static final File CWD = new File(".");
+    static final File CWD = join(".");
 
     /** All objects needed, including commits, blobs, and trees. */
     static final File OBJECTS = join(".gitlet", "objects");
