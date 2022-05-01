@@ -183,15 +183,18 @@ public class Files {
             if (stagedContent.index.containsKey(currCommit)) {
                 continue;
             }
+
             String sha1 = currHeadCommit.index.get(currCommit).getSha1();
-            File CWDFiles = join(currCommit);
-            if (!CWDFiles.exists()) {
+            File commitedFiles = join(currCommit);
+            if (!commitedFiles.exists()) {
                 modified.add(currCommit + " (deleted)");
                 continue;
             }
-            String content = readContentsAsString(CWDFiles);
-            if (!sha1(serialize(new Objects(content, currCommit))).equals(sha1))
+
+            String content = readContentsAsString(commitedFiles);
+            if (!sha1(serialize(new Objects(content, currCommit))).equals(sha1)) {
                 modified.add(currCommit + " (modified)");
+            }
         }
 
         for (String unstaged : unstagedContent.index.keySet()) {
