@@ -80,7 +80,8 @@ public class Main {
     }
 
     static void commitMain(String... args) {
-        if (args.length != 2) {
+        if (args.length != 2
+                || args[1].equals("\"\"")) {
             System.out.println("Please enter a commit message.");
             return;
         }
